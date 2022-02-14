@@ -60,7 +60,7 @@
   "liveServer.settings.donotVerifyTags": true,
   "explorer.confirmDelete": false,
   "security.workspace.trust.untrustedFiles": "open",
-  "window.zoomLevel": -2,
+  "window.zoomLevel": -1,
   //"php.validate.executablePath": "C:/Php/php.exe",
   "[xml]": {
     "editor.defaultFormatter": "fabianlauer.vs-code-xml-format"
