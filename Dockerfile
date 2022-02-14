@@ -1,5 +1,7 @@
 FROM ubuntu:18.04 AS alexandreclayton-myzap2-dev
 WORKDIR /usr/src/app
+EXPOSE 3332
+
 RUN apt-get update && apt-get install -y \
 	gconf-service \
 	libasound2 \
@@ -51,8 +53,6 @@ RUN apt-get install curl -y \
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
 	&& apt install -y ./google-chrome-stable_current_amd64.deb
 
-
-EXPOSE 3332
 CMD npm install ; node index.js
 
 #FROM alexandreclayton-myzap2-dev AS alexandreclayton-myzap2-prod
