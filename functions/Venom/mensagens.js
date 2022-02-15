@@ -582,14 +582,55 @@ export default class Mensagens {
         }
     }
 
+    static async sendListMenu(req, res) {
+        const {
+            isGroup,
+            session,
+            number,
+            title = '',
+            subTitle = '',
+            menu = 'menu',
+            list = [],
+            description = '',
+        } = req.body
+        let data = Sessions.getSession(session)
+        let recipient = isGroup ? number + '@g.us' : number + '@c.us';
+
+        if (!Array.isArray(list) || list.length == 0) {
+            return res.status(400).json({
+                status: 400,
+                error: "Lista de menus inválidos!"
+            })
+        }
+
+        console.log({ recipient, title, subTitle, description, menu, list })
+
+        try {
+            let response = await data.client.sendListMenu(recipient, title, subTitle, description, menu, list)
+            return res.status(200).json({
+                result: 200,
+                type: 'text',
+                messageId: response.to._serialized, //ok
+                session: req.body.session,
+                data: response
+            })
+        } catch (error) {
+            return res.status(500).json({
+                result: 500,
+                error: error
+            })
+        }
+
+    }
+
     static async sendButtons(req, res) {
         const {
-            isGroup = false,
-                session,
-                number,
-                title = '',
-                buttons = [],
-                description = '',
+            isGroup,
+            session,
+            number,
+            title = '',
+            buttons = [],
+            description = '',
         } = req.body
         let data = Sessions.getSession(session)
         let recipient = isGroup ? number + '@g.us' : number + '@c.us';
@@ -600,6 +641,8 @@ export default class Mensagens {
                 error: "Lista de botões inválidos!"
             })
         }
+
+        console.log({ recipient, title, buttons, description })
 
         try {
             let response = await data.client.sendButtons(recipient, title, buttons, description)
