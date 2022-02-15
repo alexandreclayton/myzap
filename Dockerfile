@@ -52,6 +52,7 @@ RUN apt-get install curl -y \
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
 	&& apt install -y ./google-chrome-stable_current_amd64.deb
 
+#CMD node index.js
 CMD npm install ; node index.js
 
 #FROM alexandreclayton-myzap2-dev AS alexandreclayton-myzap2-prod
@@ -63,3 +64,11 @@ CMD npm install ; node index.js
 #COPY .env.prod ./.env
 #EXPOSE 3332
 #CMD node index.js
+
+#
+# Build Image & Run
+#
+# Builder
+# docker build --tag=alexandreclayton-myzap2:dev .
+# Run Container
+# docker run -p 3333:3333 --rm --name alexandreclayton-myzap2-dev -v /home/sette/Projects/MyZap/alexandreclayton-myzap:/usr/src/app alexandreclayton-myzap2:dev 
