@@ -4,24 +4,24 @@
  * @Date: 2021-06-07 03:19:36
  * @LastEditTime: 2021-06-07 03:19:36
  */
-import express from'express';
+import express from 'express';
 const Router = express.Router();
-import engine from'../engines/Venom.js';
-import Sessions from'../controllers/sessions.js';
-import Status from'../functions/Venom/status.js';
-import Commands from'../functions/Venom/commands.js';
-import Groups from'../functions/Venom/groups.js';
-import Mensagens from'../functions/Venom/mensagens.js';
-import Auth from'../functions/Venom/auth.js';
-import config from'../config.js';
-import { checkParams } from'../middlewares/validations.js';
-import { checkNumber } from'../middlewares/checkNumber.js';
-import database from'../firebase/functions.js';
-import { setDoc, doc, db} from'../firebase/db.js';
+// import engine from'../engines/Venom.js';
+// import Sessions from'../controllers/sessions.js';
+import Status from '../functions/Venom/status.js';
+import Commands from '../functions/Venom/commands.js';
+import Groups from '../functions/Venom/groups.js';
+import Mensagens from '../functions/Venom/mensagens.js';
+import Auth from '../functions/Venom/auth.js';
+// import config from'../config.js';
+import { checkParams } from '../middlewares/validations.js';
+import { checkNumber } from '../middlewares/checkNumber.js';
+import database from '../firebase/functions.js';
+// import { setDoc, doc, db} from'../firebase/db.js';
 
 
+// * Sessões
 Router.post('/start', Auth.start)
-//Sessões
 Router.post('/logout', checkParams, Auth.logoutSession);
 Router.post('/close', checkParams, Auth.closeSession);
 Router.post('/SessionState', checkParams, Auth.getSessionState);
@@ -30,7 +30,7 @@ Router.post('/deleteSession', database.deleteSession);
 Router.post('/getAllSessions', database.getAllSessions);
 Router.get('/getQrCode', Auth.getQrCode);
 
-//Mensagens
+// * Mensagens
 Router.post('/sendText', checkParams, checkNumber, Mensagens.sendText);
 Router.post('/sendImage', checkParams, checkNumber, Mensagens.sendImage);
 Router.post('/sendVideo', checkParams, checkNumber, Mensagens.sendVideo);
@@ -50,8 +50,9 @@ Router.post('/getAllChatsWithMessages', checkParams, Commands.getAllChatsWithMes
 Router.post('/getAllNewMessages', checkParams, Commands.getAllNewMessages);
 Router.post('/getAllUnreadMessages', checkParams, Commands.getAllUnreadMessages);
 //Router.post('/getOrderbyMsg', checkParams, Mensagens.getOrderbyMsg);
+Router.post('/sendButtons', checkParams, Mensagens.sendButtons);
 
-// Grupos
+// * Grupos
 Router.post('/getAllGroups', checkParams, Groups.getAllGroups);
 Router.post('/joinGroup', checkParams, Groups.joinGroup);
 Router.post('/createGroup', checkParams, Groups.createGroup);
@@ -66,18 +67,19 @@ Router.post('/changePrivacyGroup', checkParams, Groups.changePrivacyGroup); //no
 Router.post('/getGroupInviteLink', checkParams, Groups.getGroupInviteLink);
 Router.post('/setGroupPic', checkParams, Groups.setGroupPic); // ver funcao nao exite
 
-// // Status
+// * Status
 Router.post('/sendTextToStorie', checkParams, Status.sendTextToStorie);
 Router.post('/sendImageToStorie', checkParams, Status.sendImageToStorie);
 Router.post('/sendVideoToStorie', checkParams, Status.sendVideoToStorie);
 
-// // Dispositivo, chats entre outras
+// * Dispositivo, chats entre outras
 Router.post('/getBatteryLevel', checkParams, Commands.getBatteryLevel);
 Router.post('/getConnectionState', checkParams, Commands.getConnectionState);
 Router.post('/getHostDevice', checkParams, Commands.getHostDevice);
 Router.post('/getAllContacts', checkParams, Commands.getAllContacts);
 Router.post('/getBlockList', checkParams, Commands.getBlockList);
 
+// * Outros
 Router.post('/getProfilePic', checkParams, checkNumber, Commands.getProfilePic);
 Router.post('/verifyNumber', checkParams, checkNumber, Commands.verifyNumber);
 Router.post('/deleteChat', checkParams, checkNumber, Commands.deleteChat);
@@ -85,10 +87,10 @@ Router.post('/clearChat', checkParams, checkNumber, Commands.clearChat);
 Router.post('/archiveChat', checkParams, checkNumber, Commands.archiveChat);
 Router.post('/deleteMessage', checkParams, checkNumber, Commands.deleteMessage);
 
+// * Contato
 Router.post('/markUnseenMessage', checkParams, checkNumber, Commands.markUnseenMessage);
 Router.post('/blockContact', checkParams, checkNumber, Commands.blockContact);
 Router.post('/unblockContact', checkParams, checkNumber, Commands.unblockContact);
 Router.post('/getNumberProfile', checkParams, checkNumber, Commands.getNumberProfile);
-
 
 export default { Router };

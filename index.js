@@ -11,7 +11,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import http from "http";
 import serveIndex from "serve-index";
-import motor from "./engines.js";
+import engines from "./engines.js";
 import config from "./config.js";
 import { yo } from "yoo-hoo";
 import events from "events";
@@ -25,7 +25,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.Server(app);
-const router = motor.engines[process.env.ENGINE].router
+const engine = engines[process.env.ENGINE]
+const router = engine.router
 const {
     startAllSessions
 } = startup;
@@ -58,12 +59,22 @@ app.use('/files', express.static('files-received'), serveIndex('files-received',
     icons: true
 }));
 */
+/*
+app.get('/start', function(req, res) {
+    res.render('index', {
+        port: config.port,
+        host: config.host,
+        host_ssl: config.host_ssl
+    })
+});
+*/
 
 app.use((req, res, next) => {
     req.io = io;
     next();
 });
 
+// * All Routes by Engine (Engine Whatsapp-Web-JS, WPPConnect or Venom)
 app.use(router);
 
 io.on('connection', sock => {
@@ -76,14 +87,6 @@ io.on('connection', sock => {
     sock.on('disconnect', () => {
         console.log(`ID: ${sock.id} socket out`)
     });
-});
-
-app.get('/start', function(req, res) {
-    res.render('index', {
-        port: config.port,
-        host: config.host,
-        host_ssl: config.host_ssl
-    })
 });
 
 if (config.https == 1) {
@@ -117,13 +120,14 @@ if (config.https == 1) {
             if (error) {
                 console.log(error)
             } else {
-                console.log('\n\nWelcome to')
+                console.log('\n\nWelcome to:')
                 yo('MyZAP', {
                     color: 'rainbow',
                     spacing: 1,
                 });
-                console.log('- Customized by @alexandreclayton')
-                console.log(`Http server running on ${config.host}:${config.port}\n\n`);
+                console.log('- Customized by @alexandreclayton - Semar Sistemas')
+                console.log(`- On Engine: ${engine.descricao}`)
+                console.log(`- Http server running on ${config.host}:${config.port}\n\n`);
                 if (config.start_all_sessions === 'true') {
                     let result = await startAllSessions()
                     if (result != undefined) {

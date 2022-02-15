@@ -108,7 +108,6 @@ export default class Venom {
                 client: client,
                 tokens: tokens
             })
-            console.log('****** VENOM->START->{client, tokens}', { client, tokens })
             return { client, tokens };
         } catch (error) {
             console.log(error)
@@ -134,6 +133,7 @@ export default class Venom {
             session: session
         });
     }
+
     static async getToken(session) {
         console.log(`****** VENOM geToken(): ${session} ******`)
         return new Promise(async(resolve, reject) => {
@@ -160,4 +160,5 @@ export default class Venom {
             }
         })
     }
+
 }
