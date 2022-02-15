@@ -6,24 +6,23 @@
  */
 import { doc, db, getDoc } from '../firebase/db.js';
 import { Client } from "whatsapp-web.js";
-import qrcode from'qrcode-terminal';
-import qrcodeBase64 from'qrcode';
-import { Launcher } from'chrome-launcher';
+import qrcode from 'qrcode-terminal';
+import qrcodeBase64 from 'qrcode';
+import { Launcher } from 'chrome-launcher';
 let chromeLauncher = Launcher.getInstallations()[0];
-import Sessions from'../controllers/sessions.js';
-import events from'../controllers/events.js';
-import webhooks from'../controllers/webhooks.js';
-import config from'../config.js';
+import Sessions from '../controllers/sessions.js';
+import events from '../controllers/events.js';
+import webhooks from '../controllers/webhooks.js';
+import config from '../config.js';
 
 export default class WhatsappWebJS {
     static async start(req, res, session) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 var useHere;
                 if (config.useHere === 'true') {
                     useHere = false
-                }
-                else {
+                } else {
                     if (config.useHere != 'true') {
                         useHere = true
                     }
@@ -34,7 +33,7 @@ export default class WhatsappWebJS {
                 const Session = doc(db, "Sessions", session);
                 const dados = await getDoc(Session);
                 if (dados.exists() && dados.data().engine === process.env.ENGINE) {
-                    console.log(`****** STARTING SESSION ${session} ******`)
+                    console.log(`****** STARTING SESSION ${session} AND WITH ENGINE ${process.env.ENGINE} ******`)
                     client = new Client({
                         restartOnAuthFail: true,
                         takeoverOnConflict: useHere,
@@ -149,14 +148,14 @@ export default class WhatsappWebJS {
 
                 });
 
-                client.on('message_create', async (message) => {
+                client.on('message_create', async(message) => {
                     // Disparado em todas as criações de mensagem, incluindo a sua 
                     if (!message.fromMe) {
                         // faça coisas aqui, pode ser disparado um webhook por exemplo
                     }
                 });
 
-                client.on('message_revoke_everyone', async (after, before) => {
+                client.on('message_revoke_everyone', async(after, before) => {
                     // Disparado sempre que uma mensagem é excluída por alguém (incluindo você)
                     //console.log(after); // mensagem depois de ser excluída.
                     if (before) {
@@ -164,16 +163,16 @@ export default class WhatsappWebJS {
                     }
                 });
 
-                client.on('message_revoke_me', async (message) => {
+                client.on('message_revoke_me', async(message) => {
                     // Disparado sempre que uma mensagem é excluída apenas em sua própria visualização.
                     //console.log(message.body); // mensagem antes de ser excluída.
                 });
 
-                client.on('media_uploaded', async (message) => {
+                client.on('media_uploaded', async(message) => {
                     //Disparado sempre quando a mídia foi carregada para uma mensagem enviada pelo cliente.
                 });
 
-                client.on('group_update', async (message) => {
+                client.on('group_update', async(message) => {
                     //Disparado sempre quando as configurações do grupo são atualizadas, como assunto, descrição ou imagem.
                     //console.log(message)
                 });
@@ -187,11 +186,9 @@ export default class WhatsappWebJS {
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');
-        req.io.emit('qrCode',
-            {
-                data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
-                session: session
-            }
-        );
+        req.io.emit('qrCode', {
+            data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
+            session: session
+        });
     }
 }

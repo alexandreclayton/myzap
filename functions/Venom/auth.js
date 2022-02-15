@@ -6,7 +6,7 @@
  */
 import Sessions from '../../controllers/sessions.js';
 import config from '../../config.js';
-import engine from'../../engines/Venom.js';
+import engine from '../../engines/Venom.js';
 import { setDoc, db, doc } from '../../firebase/db.js';
 
 
@@ -18,14 +18,14 @@ export default class Auth {
 
     static async start(req, res) {
         try {
-    
+
             if (Object.keys(config.firebaseConfig).length === 0) {
                 res.status(401).json({
                     result: 401,
                     "status": "FAIL",
                     "reason": "favor preencher as credencias de acesso ao Firebase"
                 })
-    
+
             } else {
 
                 if (req.headers['apitoken'] === config.token) {
@@ -38,8 +38,7 @@ export default class Auth {
                         let data = Sessions.getSession(session)
                         if (data.status !== 'inChat' && data.status !== 'isLogged') {
                             init(session)
-                        }
-                        else {
+                        } else {
                             res.status(400).json({
                                 result: 400,
                                 "status": "FAIL",
@@ -48,10 +47,10 @@ export default class Auth {
                             })
                         }
                     }
-    
+
                     async function init(session) {
-                        Sessions.checkAddUser(session)
-                        Sessions.addInfoSession(session, {
+                        let sessionInfo = {
+                            session,
                             apitoken: req.headers['apitoken'],
                             sessionkey: req.headers['sessionkey'],
                             wh_status: req.body.wh_status,
@@ -62,10 +61,14 @@ export default class Auth {
                             wa_secret_bundle: req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
                             wa_token_1: req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
                             wa_token_2: req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
-                        })
-    
+                        }
+                        console.log('****** VENOM->INIT->SessionInfo', sessionInfo)
+                        Sessions.checkAddUser(session)
+                        Sessions.addInfoSession(session, sessionInfo)
+
                         let response = await engine.start(req, res, session)
                         if (response != undefined) {
+                            /*
                             let data = {
                                 'session': session,
                                 'apitoken': req.headers['apitoken'],
@@ -80,18 +83,28 @@ export default class Auth {
                                 'WAToken2': response.WAToken2,
                                 'Engine': process.env.ENGINE
                             }
-    
-                            await setDoc(doc(db, "Sessions", session), data);
+														*/
+                            console.log('****** VENOM->INIT->ENGINE->START->REPONSE->', response)
+                            const { client, tokens: { WABrowserId = '', WASecretBundle = '' } } = response
+                            sessionInfo = {
+                                ...sessionInfo,
+                                'WABrowserId': WABrowserId.replaceAll('"', '') || sessionInfo.wa_browser_id,
+                                'WASecretBundle': WASecretBundle.replaceAll('"', '') || sessionInfo.wa_secret_bundle,
+                                'WAToken1': sessionInfo.wa_token_1,
+                                'WAToken2': sessionInfo.wa_token_2,
+                                'Engine': process.env.ENGINE
+                            }
+                            console.log('****** VENOM->INIT->UPDATE-FIREBASE->', sessionInfo)
+                            await setDoc(doc(db, "Sessions", session), sessionInfo);
                             res.status(200).json({
                                 "result": 200,
                                 "status": "CONNECTED",
                                 "response": `Sessão ${session} gravada com sucesso no Firebase`
                             })
-    
+
                         }
                     }
-                }
-                else {
+                } else {
                     req.io.emit('msg', {
                         result: 400,
                         "status": "FAIL",
@@ -104,7 +117,7 @@ export default class Auth {
                     })
                 }
             }
-    
+
         } catch (error) {
             res.status(500).json({
                 result: 500,
@@ -128,7 +141,8 @@ export default class Auth {
         } catch (error) {
             res.status(400).json({
                 status: false,
-                message: "Error ao fechar sessão", error
+                message: "Error ao fechar sessão",
+                error
             });
         }
     }
@@ -147,7 +161,8 @@ export default class Auth {
         } catch (error) {
             res.status(400).json({
                 status: false,
-                message: "Error ao fechar sessão", error
+                message: "Error ao fechar sessão",
+                error
             });
         }
     }
@@ -161,29 +176,27 @@ export default class Auth {
                 "result": 401,
                 "messages": "Não autorizado, verifique se o nome da sessão esta correto"
             })
+        } else
+        if (data.sessionkey != sessionkey) {
+            return res.status(401).json({
+                "result": 401,
+                "messages": "Não autorizado, verifique se o sessionkey esta correto"
+            })
+        } else {
+            try {
+                var img = Buffer.from(data.qrCode.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64');
+                res.writeHead(200, {
+                    'Content-Type': 'image/png',
+                    'Content-Length': img.length
+                });
+                res.end(img);
+            } catch (ex) {
+                return res.status(400).json({
+                    response: false,
+                    message: "Error ao recuperar QRCode !"
+                });
+            }
         }
-        else
-            if (data.sessionkey != sessionkey) {
-                return res.status(401).json({
-                    "result": 401,
-                    "messages": "Não autorizado, verifique se o sessionkey esta correto"
-                })
-            }
-            else {
-                try {
-                    var img = Buffer.from(data.qrCode.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64');
-                    res.writeHead(200, {
-                        'Content-Type': 'image/png',
-                        'Content-Length': img.length
-                    });
-                    res.end(img);
-                } catch (ex) {
-                    return res.status(400).json({
-                        response: false,
-                        message: "Error ao recuperar QRCode !"
-                    });
-                }
-            }
 
     }
     static async getSessionState(req, res) {
@@ -241,4 +254,3 @@ export default class Auth {
         // return res.status(200).json(allSessions);
     }
 }
-

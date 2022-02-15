@@ -9,7 +9,7 @@ services:
     volumes:
       - ${PATH_LOCAL}:/usr/src/app
     ports:
-      - ${HOST_PORT}:${HOST_PORT}
+      - ${PORT}:${PORT}
     stdin_open: true # docker run -i
     tty: true # docker run -t
     networks:

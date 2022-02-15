@@ -46,9 +46,8 @@ RUN apt-get update && apt-get install -y \
 	git
 
 RUN apt-get install curl -y \
-	&& curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-	&& apt-get install -y \
-	nodejs
+	&& curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+	&& apt-get install -y nodejs
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
 	&& apt install -y ./google-chrome-stable_current_amd64.deb
