@@ -57,7 +57,6 @@ export default class Mensagens {
             }
 
             let response = await data.client.sendImage(number, path, 'imagem', caption)
-            console.log(response)
             return res.status(200).json({
                 result: 200,
                 type: 'image',
@@ -603,8 +602,6 @@ export default class Mensagens {
             })
         }
 
-        console.log({ recipient, title, subTitle, description, menu, list })
-
         try {
             let response = await data.client.sendListMenu(recipient, title, subTitle, description, menu, list)
             return res.status(200).json({
@@ -641,8 +638,6 @@ export default class Mensagens {
                 error: "Lista de botões inválidos!"
             })
         }
-
-        console.log({ recipient, title, buttons, description })
 
         try {
             let response = await data.client.sendButtons(recipient, title, buttons, description)

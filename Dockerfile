@@ -71,4 +71,4 @@ CMD npm install ; node index.js
 # Builder
 # docker build --tag=alexandreclayton-myzap2:dev .
 # Run Container
-# docker run -p 3333:3333 --rm --name alexandreclayton-myzap2-dev -v /home/sette/Projects/MyZap/alexandreclayton-myzap:/usr/src/app alexandreclayton-myzap2:dev 
+# docker run -p 3333:3333 --rm --name alexandreclayton-myzap2-dev -v /home/sette/Projects/MyZap/alexandreclayton-myzap:/usr/src/app alexandreclayton-myzap2:dev

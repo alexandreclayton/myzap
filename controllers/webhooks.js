@@ -5,7 +5,7 @@
  * @LastEditTime: 2021-06-07 03:18:01
  */
 import Sessions from '../controllers/sessions.js';
-import superagent  from 'superagent';
+import superagent from 'superagent';
 import 'superagent-queue';
 import dotenv from 'dotenv'
 dotenv.config();
@@ -22,8 +22,8 @@ export default class Webhooks {
                     .post(data.wh_message)
                     .send(response)
                     .queue('messages')
-                    .end(function () {
-                        console.log('webhooks receive message....')
+                    .end(function() {
+                        console.log('webhooks receive message....', { response })
                     });
                 if (data.wh_message == '') {
                     console.log('Webhook no defined')
@@ -64,7 +64,7 @@ export default class Webhooks {
                     .post(data.wh_connect)
                     .send(object)
                     .queue('connection')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks connect status....')
                     });
                 if (data.wh_connect == '') {
@@ -86,7 +86,7 @@ export default class Webhooks {
                     .post(data.wh_status)
                     .send(response)
                     .queue('status')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks status message....')
                     });
                 if (data.wh_status == '') {
@@ -113,7 +113,7 @@ export default class Webhooks {
                     .post(data.wh_qrcode)
                     .send(object)
                     .queue('qrcode')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks status message....')
                     });
                 if (data.wh_qrcode == '') {

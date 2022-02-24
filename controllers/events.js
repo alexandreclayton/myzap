@@ -1,4 +1,3 @@
-
 /*
  * @Author: Eduardo Policarpo
  * @contact: +55 43996611437
@@ -12,8 +11,9 @@ import config from '../config.js';
 export default class Events {
 
     static async receiveMessage(session, client) {
+        //* 1 - para WhatsApp-Web-JS  / 2 - para WPPCONNECT / 3 - para VENOM
         if (config.engine === '1') {
-            client.on('message', async (message) => {
+            client.on('message', async(message) => {
                 let type = message.type
 
                 let response = []
@@ -67,6 +67,7 @@ export default class Events {
                         }
 
                         break;
+
                     case 'sticker':
                         fs.writeFileSync(`files-received/${fileName}`, buffer.data, { encoding: 'base64' }, (err) => {
                             console.log('arquivo baixado!')
@@ -246,12 +247,50 @@ export default class Events {
                         }
 
                         break;
+
+                    case 'list_response':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'list_response',
+                            "id": message.id._serialized,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "sender": message.to.split('@')[0],
+                            "phone": message.from.split('@')[0],
+                            "content": message.body,
+                            "listResponse": {
+                                ...message.listResponse,
+                                selectedRowId: message.listResponse.singleSelectReply.selectedRowId
+                            },
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'buttons_response':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'buttons_response',
+                            "id": message.id._serialized,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "sender": message.to.split('@')[0],
+                            "phone": message.from.split('@')[0],
+                            "content": message.body,
+                            "selectedButtonId": message.selectedButtonId,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
                 }
                 await webhooks.wh_messages(session, response)
             });
 
-        }
-        else {
+        } else {
             await client.onMessage(async message => {
                 let type = message.type
                 if (type == 'chat' && message.subtype == 'url') {
@@ -259,8 +298,7 @@ export default class Events {
                 } else if (type == 'chat' && !message.subtype) {
                     type = 'text'
                 }
-
-                let response = []
+                let response = { error: "Not implemented yet", message }
                 if (message.isMedia === true || message.isMMS === true || message.type == 'document' || message.type == 'ptt' || message.type == 'sticker') {
                     var buffer = await client.decryptFile(message);
                     var telefone = ((String(`${message.from}`).split('@')[0]).substr(2));
@@ -311,6 +349,7 @@ export default class Events {
                         }
 
                         break;
+
                     case 'sticker':
                         fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
                             console.log('arquivo baixado!')
@@ -490,6 +529,45 @@ export default class Events {
                         }
 
                         break;
+
+                    case 'list_response':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'list_response',
+                            "id": message.id,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "sender": message.to.split('@')[0],
+                            "phone": message.from.split('@')[0],
+                            "content": message.body,
+                            "listResponse": {
+                                ...message.listResponse,
+                                selectedRowId: message.listResponse.singleSelectReply.selectedRowId
+                            },
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'buttons_response':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'buttons_response',
+                            "id": message.id,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "sender": message.to.split('@')[0],
+                            "phone": message.from.split('@')[0],
+                            "content": message.body,
+                            "selectedButtonId": message.selectedButtonId,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
                 }
 
                 await webhooks.wh_messages(session, response)
@@ -500,7 +578,7 @@ export default class Events {
 
     static statusMessage(session, client) {
         if (config.engine === '1') {
-            client.on('message_ack', async (message, ack) => {
+            client.on('message_ack', async(message, ack) => {
                 let type = message.type
 
                 let status
@@ -581,8 +659,7 @@ export default class Events {
 
                 await webhooks.wh_status(session, response)
             });
-        }
-        else {
+        } else {
             client.onAck(async ack => {
                 let type = ack.type
                 if (type == 'chat' && ack.subtype == 'url') {
