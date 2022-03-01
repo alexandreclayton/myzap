@@ -1,7 +1,5 @@
-FROM ubuntu:18.04 AS alexandreclayton-myzap2-dev
+FROM ubuntu:20.04 AS sn-stage-base
 WORKDIR /usr/src/app
-EXPOSE 3332
-
 RUN apt-get update && apt-get install -y \
 	gconf-service \
 	libasound2 \
@@ -52,23 +50,15 @@ RUN apt-get install curl -y \
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
 	&& apt install -y ./google-chrome-stable_current_amd64.deb
 
-#CMD node index.js
-CMD npm install ; node index.js
+CMD bash
 
-#FROM alexandreclayton-myzap2-dev AS alexandreclayton-myzap2-prod
-#WORKDIR /usr/src/app
-#COPY package*.json ./
-#RUN npm install
-#COPY . .
-#RUN rm -rf .env
-#COPY .env.prod ./.env
-#EXPOSE 3332
-#CMD node index.js
+FROM sn-stage-base as sn-stage-install
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
 
-#
-# Build Image & Run
-#
-# Builder
-# docker build --tag=alexandreclayton-myzap2:dev .
-# Run Container
-# docker run -p 3333:3333 --rm --name alexandreclayton-myzap2-dev -v /home/sette/Projects/MyZap/alexandreclayton-myzap:/usr/src/app alexandreclayton-myzap2:dev
+FROM sn-stage-install as sn-stage-run
+WORKDIR /usr/src/app
+EXPOSE 3333
+COPY . .
+CMD node index.js
