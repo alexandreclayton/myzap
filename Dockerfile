@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS sn-stage-base
+FROM ubuntu:18.04 AS sn-stage-base
 WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y \
 	gconf-service \
@@ -54,11 +54,12 @@ CMD bash
 
 FROM sn-stage-base as sn-stage-install
 WORKDIR /usr/src/app
-COPY package*.json ./
+COPY package*.json .
 RUN npm install
 
 FROM sn-stage-install as sn-stage-run
 WORKDIR /usr/src/app
 EXPOSE 3333
+COPY --from=sn-stage-install /usr/src/app .
 COPY . .
 CMD node index.js
