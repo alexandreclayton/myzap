@@ -41,7 +41,8 @@ RUN apt-get update && apt-get install -y \
 	build-essential \
 	apt-transport-https \
 	libgbm-dev \
-	git
+	git \
+	vim
 
 RUN apt-get install curl -y \
 	&& curl -sL https://deb.nodesource.com/setup_16.x | bash - \
