@@ -1,10 +1,10 @@
 version: "3.5"
 services:
-  alexandreclayton-myzap2-dev:
+  sn-zap-api:
     build:
       context: .
-      target: alexandreclayton-myzap2-dev
-    container_name: alexandreclayton-myzap2-dev
+#      target: sn-zap-stage-base
+    container_name: sn-zap-api
     working_dir: /usr/src/app
     volumes:
       - ${PATH_LOCAL}:/usr/src/app
@@ -15,7 +15,7 @@ services:
     networks:
       backend:
         aliases:
-          - alexandreclayton-myzap2-dev
+          - sn-zap-api
 
 #  myzap_2prod:
 #    build: 
@@ -31,7 +31,7 @@ services:
 #          - myzap_2prod
 networks:
   backend:
-    name: alexandreclayton-myzap2-networks
+    name: sn-zap-api-networks
 
 # Build
 # docker-compose up --build -d

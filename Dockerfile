@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 AS sn-stage-base
+FROM ubuntu:18.04 AS sn-zap-stage-base
 WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y \
 	gconf-service \
@@ -53,14 +53,14 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 CMD bash
 
-FROM sn-stage-base as sn-stage-install
+FROM sn-zap-stage-base as sn-zap-stage-install
 WORKDIR /usr/src/app
 COPY package*.json .
 RUN npm install
 
-FROM sn-stage-install as sn-stage-run
+FROM sn-zap-stage-install as sn-zap-stage-run
 WORKDIR /usr/src/app
 EXPOSE 3333
-COPY --from=sn-stage-install /usr/src/app .
+COPY --from=sn-zap-stage-install /usr/src/app .
 COPY . .
 CMD node index.js
