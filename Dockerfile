@@ -64,3 +64,6 @@ EXPOSE 3333
 COPY --from=sn-zap-stage-install /usr/src/app .
 COPY . .
 CMD node index.js
+
+#docker build --tag=smr-myzap:dev .
+#docker run -p 3333:3333 -d -it --rm --name sm-myzap-dev -v "$(pwd):/usr/src/app" smr-myzap:dev
