@@ -18,8 +18,8 @@ export default class Wppconnect {
         try {
             const client = await wppconnect.create({
                 session: session,
-                tokenStore: 'file',
-                folderNameToken: './tokens',
+                tokenStore: 'memory',
+                // folderNameToken: './tokens',
                 catchQR: (base64Qrimg, ascii) => {
                     webhooks.wh_qrcode(session, base64Qrimg)
                     this.exportQR(req, res, base64Qrimg, session);
@@ -28,7 +28,6 @@ export default class Wppconnect {
                     })
                 },
                 statusFind: (statusSession, session) => {
-                    console.log(statusSession)
                     Sessions.addInfoSession(session, {
                         status: statusSession
                     })

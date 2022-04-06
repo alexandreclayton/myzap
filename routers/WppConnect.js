@@ -49,7 +49,7 @@ Router.post('/getAllChatsWithMessages', checkParams, Commands.getAllChatsWithMes
 Router.post('/getAllNewMessages', checkParams, Commands.getAllNewMessages);
 Router.post('/getAllUnreadMessages', checkParams, Commands.getAllUnreadMessages);
 Router.post('/getOrderbyMsg', checkParams, Mensagens.getOrderbyMsg);
-// Router.post('/sendListMenu', checkParams, checkNumber, Mensagens.sendListMenu);
+Router.post('/sendListMenu', checkParams, checkNumber, Mensagens.sendListMenu);
 Router.post('/sendButtons', checkParams, checkNumber, Mensagens.sendButtons);
 
 // // Grupos

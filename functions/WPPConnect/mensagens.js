@@ -594,6 +594,53 @@ export default class Mensagens {
         }
     }
 
+    static async sendListMenu(req, res) {
+        const {
+            isGroup,
+            session,
+            number,
+            title = '',
+            description = '',
+            list = [],
+        } = req.body
+        
+        let data = Sessions.getSession(session)
+        let recipient = isGroup === true ? number + '@g.us' : number + '@c.us';
+
+        if (!Array.isArray(list) || list.length == 0) {
+            return res.status(400).json({
+                status: 400,
+                error: "Lista de menus inválidos!"
+            })
+        }    
+
+        try {
+            const menus = {
+                buttonText: title,
+                description,
+                sections: list.map((l) => ({ ...l, rows: l.rows.map((r,idx) => ({ ...r, rowId: `id@${idx}` })), }))
+            }
+            console.log('menus=>')
+            let response = await data.client.sendListMessage(recipient, menus)
+            console.log('response=>', response)
+            console.dir(menus, { depth: null })
+            return res.status(200).json({
+                result: 200,
+                type: 'list',
+                session: req.body.session,
+                messageId: response.id,
+                from: response.from.split('@')[0],
+                to: response.chatId.user,
+                content: response.content
+            })
+        } catch (error) {
+            return res.status(500).json({
+                result: 500,
+                error: error
+            })
+        }
+    }
+
     static async sendButtons(req, res) {
         const {
             isGroup,
@@ -618,8 +665,9 @@ export default class Mensagens {
             const buttonsSend = {
                 title,
                 footer: '',
-                buttons: buttons.map((b, idx) => ({ id: `id@${idx}`, text: b?.buttonText?.displayText ?? '' }))
+                buttons: buttons.map((b, idx) => ({ id: `id@${idx}`, text: b?.buttonTitle ?? '' }))
             }
+            console.log('sendButtons=>dto', buttonsSend)
             let response = await data.client.sendText(recipient, description, buttonsSend)
             return res.status(200).json({
                 result: 200,

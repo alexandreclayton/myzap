@@ -384,30 +384,30 @@ export default class Mensagens {
                 error: "URL não foi informada, é obrigatorio"
             })
         } else
-        if (!isURL) {
-            return res.status(400).json({
-                status: 400,
-                error: "Link informado é invalido"
-            })
-        } else {
-            try {
-                let response = await data.client.sendLinkPreview(number, req.body.url, req.body.text)
-
-                return res.status(200).json({
-                    result: 200,
-                    type: 'link',
-                    messageId: response.id,
-                    session: req.body.session,
-                    data: response
-                })
-            } catch (error) {
+            if (!isURL) {
                 return res.status(400).json({
-                    result: 400,
-                    "status": "FAIL",
-                    "log": error
+                    status: 400,
+                    error: "Link informado é invalido"
                 })
+            } else {
+                try {
+                    let response = await data.client.sendLinkPreview(number, req.body.url, req.body.text)
+
+                    return res.status(200).json({
+                        result: 200,
+                        type: 'link',
+                        messageId: response.id,
+                        session: req.body.session,
+                        data: response
+                    })
+                } catch (error) {
+                    return res.status(400).json({
+                        result: 400,
+                        "status": "FAIL",
+                        "log": error
+                    })
+                }
             }
-        }
     }
 
     static async sendContact(req, res) {
@@ -581,6 +581,29 @@ export default class Mensagens {
         }
     }
 
+    /*
+    {
+        "session": "",
+        "number": "5581999999999",
+        "title": "Title",
+        "description": "Description",
+        "list": [       
+            {
+                "title": "TITLE SECTION",
+                "rows": [
+                    {
+                        "title": "TITLE ITEM 1",
+                        "description": "description item 1"
+                    },
+                    {
+                        "title": "TITLE ITEM 2",
+                        "description": "description item 2"
+                    }
+                ]
+            }
+        ]
+    }
+    */
     static async sendListMenu(req, res) {
         const {
             isGroup,
@@ -620,6 +643,22 @@ export default class Mensagens {
 
     }
 
+    /*
+    {
+        "session": "",
+        "number": "5581999999999",
+        "title": "Title",
+        "description": "Description",
+        "buttons": [
+            {
+                "displayText": "Text of Button 1"
+            },
+            {
+                "displayText": "Text of Button 2"
+            }
+        ]
+    }
+    */
     static async sendButtons(req, res) {
         const {
             isGroup,
@@ -639,8 +678,10 @@ export default class Mensagens {
             })
         }
 
+        const buttonsFormated = buttons.map((b) => ({ buttonText: { displayText: b.buttonTitle } }))
+
         try {
-            let response = await data.client.sendButtons(recipient, title, buttons, description)
+            let response = await data.client.sendButtons(recipient, title, buttonsFormated, description)
             return res.status(200).json({
                 result: 200,
                 type: 'text',
