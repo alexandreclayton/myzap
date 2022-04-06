@@ -36,7 +36,7 @@ async function getAllSessions() {
                 );
                 SessionsArray.push(Session);
             });
-            return (SessionsArray);
+            return SessionsArray;
         }
     } catch (error) {
         return (error.message);
