@@ -86,7 +86,8 @@ export default class Auth {
                             res.status(200).json({
                                 "result": 200,
                                 "status": "CONNECTED",
-                                "response": `Sessão ${session} gravada com sucesso no Firebase`
+                                "response": `Sessão ${session} gravada com sucesso no Firebase`,
+                                sessionInfo
                             })
 
                         }

@@ -19,7 +19,8 @@ export default class Wppconnect {
         try {
             const client = await wppconnect.create({
                 session: session,
-                tokenStore: 'memory',
+                tokenStore: 'file',
+                folderNameToken: './tokens',
                 catchQR: (base64Qrimg, ascii) => {
                     webhooks.wh_qrcode(session, base64Qrimg)
                     this.exportQR(req, res, base64Qrimg, session);
@@ -50,10 +51,13 @@ export default class Wppconnect {
 
                 },
                 headless: true,
+                devtools: false,
+                useChrome: true,
+                debug: false,
                 logQR: true,
                 browserWS: '', //browserless !=  '' ? browserless.replace('https://', 'wss://')+'?token='+token_browser : '',
-                useChrome: true,
                 updatesLog: false,
+                disableWelcome: false,
                 autoClose: 90000,
                 browserArgs: [
                     '--log-level=3',
@@ -111,11 +115,11 @@ export default class Wppconnect {
                 client: client,
                 tokens: tokens
             })
-            return client, tokens;
+            return { client, tokens };
         } catch (error) {
             console.log(error)
         }
-
+        return undefined
     }
 
     static async stop(session) {
@@ -126,6 +130,7 @@ export default class Wppconnect {
         }
         return false
     }
+    
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');

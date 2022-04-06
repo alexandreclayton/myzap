@@ -8,7 +8,7 @@
 ##############################################################################*/
 
 import SessionsDB from "./firebase/model.js";
-import { snapshot} from './firebase/db.js';
+import { snapshot } from './firebase/db.js';
 import request from "request-promise";
 import config from "./config.js";
 

@@ -337,7 +337,6 @@ export default class Mensagens {
         }
     }
 
-
     static async sendVoiceBase64(req, res) {
         let data = Sessions.getSession(req.body.session)
         let number = req.body.number;
@@ -379,7 +378,7 @@ export default class Mensagens {
         let isURL = await urlExists(req.body.url);
         let isGroup = req.body.isGroup;
         let number = isGroup === true ? req.body.number + '@g.us' : req.body.number + '@c.us';
-        
+
         if (!req.body.url) {
             return res.status(400).json({
                 status: 400,
@@ -593,5 +592,50 @@ export default class Mensagens {
                 })
             }
         }
+    }
+
+    static async sendButtons(req, res) {
+        const {
+            isGroup,
+            session,
+            number,
+            title = '',
+            buttons = [],
+            description = '',
+        } = req.body
+        
+        let data = Sessions.getSession(session)
+        let recipient = isGroup === true ? number + '@g.us' : number + '@c.us';
+
+        if (!Array.isArray(buttons) || buttons.length == 0) {
+            return res.status(400).json({
+                status: 400,
+                error: "Lista de botões inválidos!"
+            })
+        }       
+
+        try {
+            const buttonsSend = {
+                title,
+                footer: '',
+                buttons: buttons.map((b, idx) => ({ id: `id@${idx}`, text: b?.buttonText?.displayText ?? '' }))
+            }
+            let response = await data.client.sendText(recipient, description, buttonsSend)
+            return res.status(200).json({
+                result: 200,
+                type: 'buttons',
+                session: req.body.session,
+                messageId: response.id,
+                from: response.from.split('@')[0],
+                to: response.chatId.user,
+                content: response.content
+            })
+        } catch (error) {
+            return res.status(500).json({
+                result: 500,
+                error: error
+            })
+        }
+
     }
 }

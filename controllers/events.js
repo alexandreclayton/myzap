@@ -530,7 +530,7 @@ export default class Events {
 
                         break;
 
-                    case 'list_response':
+                    case 'list':
                         response = {
                             "wook": 'RECEIVE_MESSAGE',
                             "type": 'list_response',
@@ -551,7 +551,7 @@ export default class Events {
                         }
                         break;
 
-                    case 'buttons_response':
+                    case 'buttons':
                         response = {
                             "wook": 'RECEIVE_MESSAGE',
                             "type": 'buttons_response',

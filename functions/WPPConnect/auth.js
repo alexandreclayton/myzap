@@ -43,8 +43,8 @@ export default class Auth {
                     }
     
                     async function init(session) {
-                        Sessions.checkAddUser(session)
-                        Sessions.addInfoSession(session, {
+                        let sessionInfo = {
+                            session,
                             apitoken: req.headers['apitoken'],
                             sessionkey: req.headers['sessionkey'],
                             wh_status: req.body.wh_status,
@@ -55,10 +55,13 @@ export default class Auth {
                             wa_secret_bundle: req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
                             wa_token_1: req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
                             wa_token_2: req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
-                        })
+                        }
+                        Sessions.checkAddUser(session)
+                        Sessions.addInfoSession(session, sessionInfo)
     
                         let response = await engine.start(req, res, session)
                         if (response != undefined) {
+                            /*
                             let data = {
                                 'session': session,
                                 'apitoken': req.headers['apitoken'],
@@ -73,13 +76,24 @@ export default class Auth {
                                 'WAToken2': response.WAToken2,
                                 'Engine': process.env.ENGINE
                             }
+                            */
+                            const { client, tokens: { WABrowserId = '', WASecretBundle = '' } } = response
+                            sessionInfo = {
+                                ...sessionInfo,
+                                'WABrowserId': WABrowserId.replaceAll('"', '') || sessionInfo.wa_browser_id,
+                                'WASecretBundle': WASecretBundle.replaceAll('"', '') || sessionInfo.wa_secret_bundle,
+                                'WAToken1': sessionInfo.wa_token_1,
+                                'WAToken2': sessionInfo.wa_token_2,
+                                'Engine': process.env.ENGINE
+                            }
     
-                            await setDoc(doc(db, "Sessions", session), data);
+                            await setDoc(doc(db, "Sessions", session), sessionInfo);
     
                             res.status(200).json({
                                 "result": 200,
                                 "status": "CONNECTED",
-                                "response": `Sessão ${session} gravada com sucesso no Firebase`
+                                "response": `Sessão ${session} gravada com sucesso no Firebase`,
+                                sessionInfo
                             })
     
                         }
