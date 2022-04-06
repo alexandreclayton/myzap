@@ -67,7 +67,6 @@ async function startAllSessions() {
                         "wh_status": item.wh_status,
                         "wh_message": item.wh_message
                     }
-
                 };
                 request(options).then(result => {
                     console.log(result)
