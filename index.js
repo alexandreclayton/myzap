@@ -128,7 +128,7 @@ if (config.https == 1) {
                 console.log('- Customized by @alexandreclayton - Semar Sistemas')
                 console.log(`- On Engine: ${engine.descricao}`)
                 console.log(`- Http server running on ${config.host}:${config.port}\n\n`);
-                if (config.start_all_sessions === 'true') {
+                if (config.start_all_sessions == 'true') {
                     let result = await startAllSessions()
                     if (result != undefined) {
                         console.log(result)

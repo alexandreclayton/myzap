@@ -58,7 +58,7 @@ async function startAllSessions() {
                     'url': `${config.host}:${config.port}/start`,
                     'headers': {
                         'apitoken': item.apitoken,
-                        'sessionkey': item.sessionkey
+                        'sessionkey': item.sessionkey,
                     },
                     body: {
                         "session": item.session,

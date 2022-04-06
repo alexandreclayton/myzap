@@ -11,8 +11,6 @@ import { setDoc, db, doc } from '../../firebase/db.js';
 
 export default class Auth {
 
-
-
     static async start(req, res) {
         try {
             if (Object.keys(config.firebaseConfig).length === 0) {
@@ -77,13 +75,16 @@ export default class Auth {
                                 'Engine': process.env.ENGINE
                             }
                             */
-                            const { client, tokens: { WABrowserId = '', WASecretBundle = '' } } = response
+                            const {
+                                client, 
+                                tokens: { WABrowserId = '', WASecretBundle = '', WAToken1 = '', WAToken2 = '' },
+                            } = response
                             sessionInfo = {
                                 ...sessionInfo,
-                                'WABrowserId': WABrowserId.replaceAll('"', '') || sessionInfo.wa_browser_id,
-                                'WASecretBundle': WASecretBundle.replaceAll('"', '') || sessionInfo.wa_secret_bundle,
-                                'WAToken1': sessionInfo.wa_token_1,
-                                'WAToken2': sessionInfo.wa_token_2,
+                                'WABrowserId': WABrowserId ? WABrowserId?.replaceAll('"', '') : sessionInfo.wa_browser_id,
+                                'WASecretBundle': WASecretBundle ? WASecretBundle?.replaceAll('"', '') : sessionInfo.wa_secret_bundle,
+                                'WAToken1': WAToken1 ? WAToken1?.replaceAll('"', '') : sessionInfo.wa_token_1,
+                                'WAToken2': WAToken2 ? WAToken2?.replaceAll('"', '') : sessionInfo.wa_token_2,
                                 'Engine': process.env.ENGINE
                             }
     
