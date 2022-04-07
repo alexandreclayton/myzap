@@ -23,7 +23,7 @@ export default class Webhooks {
                     .send(response)
                     .queue('messages')
                     .end(function() {
-                        console.log('webhooks receive message....', { response })
+                        console.log('webhooks receive message....')
                     });
                 if (data.wh_message == '') {
                     console.log('Webhook no defined')
@@ -125,4 +125,5 @@ export default class Webhooks {
             console.log(error)
         }
     }
+    
 }
