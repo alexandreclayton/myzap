@@ -603,7 +603,7 @@ export default class Mensagens {
             description = '',
             list = [],
         } = req.body
-        
+
         let data = Sessions.getSession(session)
         let recipient = isGroup === true ? number + '@g.us' : number + '@c.us';
 
@@ -612,13 +612,13 @@ export default class Mensagens {
                 status: 400,
                 error: "Lista de menus inválidos!"
             })
-        }    
+        }
 
         try {
             const menus = {
                 buttonText: title,
                 description,
-                sections: list.map((l) => ({ ...l, rows: l.rows.map((r,idx) => ({ ...r, rowId: `id@${idx}` })), }))
+                sections: list.map((l) => ({ ...l, rows: l.rows.map((r, idx) => ({ ...r, rowId: `id${idx}` })), }))
             }
             console.log('menus=>')
             let response = await data.client.sendListMessage(recipient, menus)
@@ -628,10 +628,10 @@ export default class Mensagens {
                 result: 200,
                 type: 'list',
                 session: req.body.session,
-                messageId: response.id,
-                from: response.from.split('@')[0],
-                to: response.chatId.user,
-                content: response.content
+                messageId: response?.id ?? '',
+                from: response?.from?.split('@')[0] ?? '',
+                to: response?.chatId?.user ?? '',
+                content: response?.content ?? ''
             })
         } catch (error) {
             return res.status(500).json({
@@ -650,7 +650,7 @@ export default class Mensagens {
             buttons = [],
             description = '',
         } = req.body
-        
+
         let data = Sessions.getSession(session)
         let recipient = isGroup === true ? number + '@g.us' : number + '@c.us';
 
@@ -659,13 +659,13 @@ export default class Mensagens {
                 status: 400,
                 error: "Lista de botões inválidos!"
             })
-        }       
+        }
 
         try {
             const buttonsSend = {
                 title,
                 footer: '',
-                buttons: buttons.map((b, idx) => ({ id: `id@${idx}`, text: b?.buttonTitle ?? '' }))
+                buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id${idx}`, text: b?.buttonTitle ?? '' }))
             }
             console.log('sendButtons=>dto', buttonsSend)
             let response = await data.client.sendText(recipient, description, buttonsSend)

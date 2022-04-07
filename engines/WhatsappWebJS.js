@@ -17,7 +17,7 @@ import config from '../config.js';
 
 export default class WhatsappWebJS {
     static async start(req, res, session) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 var useHere;
                 if (config.useHere === 'true') {
@@ -38,23 +38,43 @@ export default class WhatsappWebJS {
                         restartOnAuthFail: true,
                         takeoverOnConflict: useHere,
                         puppeteer: {
-                            headless: false,
+                            headless: false,                            
                             args: [
-                                '--no-sandbox',
+                                '--log-level=3',
+                                '--no-default-browser-check',
+                                '--disable-site-isolation-trials',
+                                '--no-experiments',
+                                '--ignore-gpu-blacklist',
+                                '--ignore-certificate-errors',
+                                '--ignore-certificate-errors-spki-list',
+                                '--disable-gpu',
+                                '--disable-extensions',
+                                '--disable-default-apps',
+                                '--enable-features=NetworkService',
                                 '--disable-setuid-sandbox',
-                                '--disable-dev-shm-usage',
+                                '--no-sandbox',
+                                // Extras
+                                '--disable-webgl',
+                                '--disable-threaded-animation',
+                                '--disable-threaded-scrolling',
+                                '--disable-in-process-stack-traces',
+                                '--disable-histogram-customizer',
+                                '--disable-gl-extensions',
+                                '--disable-composited-antialiasing',
+                                '--disable-canvas-aa',
+                                '--disable-3d-apis',
                                 '--disable-accelerated-2d-canvas',
-                                '--no-first-run',
-                                '--no-zygote',
-                                '--single-process',
-                                '--disable-gpu'
+                                '--disable-accelerated-jpeg-decoding',
+                                '--disable-accelerated-mjpeg-decode',
+                                '--disable-app-list-dismiss-on-blur',
+                                '--disable-accelerated-video-decode',
                             ],
                         },
                         session: {
-                            WABrowserId: dados.data().WABrowserId,
-                            WASecretBundle: dados.data().WASecretBundle,
-                            WAToken1: dados.data().WAToken1,
-                            WAToken2: dados.data().WAToken2,
+                            WABrowserId: token.WABrowserId,
+                            WASecretBundle: token.WASecretBundle,
+                            WAToken1: token.WAToken1,
+                            WAToken2: token.WAToken2,
                             engine: process.env.ENGINE
                         }
                     });
@@ -148,14 +168,14 @@ export default class WhatsappWebJS {
 
                 });
 
-                client.on('message_create', async(message) => {
+                client.on('message_create', async (message) => {
                     // Disparado em todas as criações de mensagem, incluindo a sua 
                     if (!message.fromMe) {
                         // faça coisas aqui, pode ser disparado um webhook por exemplo
                     }
                 });
 
-                client.on('message_revoke_everyone', async(after, before) => {
+                client.on('message_revoke_everyone', async (after, before) => {
                     // Disparado sempre que uma mensagem é excluída por alguém (incluindo você)
                     //console.log(after); // mensagem depois de ser excluída.
                     if (before) {
@@ -163,16 +183,16 @@ export default class WhatsappWebJS {
                     }
                 });
 
-                client.on('message_revoke_me', async(message) => {
+                client.on('message_revoke_me', async (message) => {
                     // Disparado sempre que uma mensagem é excluída apenas em sua própria visualização.
                     //console.log(message.body); // mensagem antes de ser excluída.
                 });
 
-                client.on('media_uploaded', async(message) => {
+                client.on('media_uploaded', async (message) => {
                     //Disparado sempre quando a mídia foi carregada para uma mensagem enviada pelo cliente.
                 });
 
-                client.on('group_update', async(message) => {
+                client.on('group_update', async (message) => {
                     //Disparado sempre quando as configurações do grupo são atualizadas, como assunto, descrição ou imagem.
                     //console.log(message)
                 });

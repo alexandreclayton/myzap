@@ -48,15 +48,17 @@ export default class Venom {
                         req.io.emit('whatsapp-status', true)
                     }
                 }, {
+                    debug: false,
+                    updatesLog: true,
+                    devtools: false,
                     headless: true,
                     logQR: true,
                     browserWS: '', //browserless !=  '' ? browserless.replace('https://', 'wss://')+'?token='+token_browser : '',
                     useChrome: true,
-                    updatesLog: true,
                     autoClose: 90000,
                     disableSpins: false,
                     browserArgs: [
-                        '--log-level=3',
+                        '--log-level=0',
                         '--no-default-browser-check',
                         '--disable-site-isolation-trials',
                         '--no-experiments',

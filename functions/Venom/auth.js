@@ -181,6 +181,7 @@ export default class Auth {
         }
 
     }
+    
     static async getSessionState(req, res) {
         let data = Sessions.getSession(req.body.session)
         try {
@@ -216,6 +217,7 @@ export default class Auth {
             });
         }
     }
+
     static async showAllSessions(req, res) {
         // let data = Sessions.getAll();
         // const allSessions = data.forEach(element => {

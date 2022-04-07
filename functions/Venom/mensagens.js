@@ -679,9 +679,22 @@ export default class Mensagens {
         }
 
         const buttonsFormated = buttons.map((b) => ({ buttonText: { displayText: b.buttonTitle } }))
+        const buttonsAA = [
+            {
+              "buttonText": {
+                "displayText": "Text of Button 1"
+                }
+              },
+            {
+              "buttonText": {
+                "displayText": "Text of Button 2"
+                }
+              }
+            ]
 
         try {
-            let response = await data.client.sendButtons(recipient, title, buttonsFormated, description)
+            console.log('buttonsFormated=>', buttonsFormated)
+            let response = await data.client.sendButtons(recipient, title, buttonsAA, description)
             return res.status(200).json({
                 result: 200,
                 type: 'text',
