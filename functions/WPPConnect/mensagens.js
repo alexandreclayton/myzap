@@ -620,10 +620,8 @@ export default class Mensagens {
                 description,
                 sections: list.map((l) => ({ ...l, rows: l.rows.map((r, idx) => ({ ...r, rowId: `id${idx}` })), }))
             }
-            console.log('menus=>')
             let response = await data.client.sendListMessage(recipient, menus)
-            console.log('response=>', response)
-            console.dir(menus, { depth: null })
+            // console.dir(menus, { depth: null })
             return res.status(200).json({
                 result: 200,
                 type: 'list',
@@ -667,7 +665,6 @@ export default class Mensagens {
                 footer: '',
                 buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id${idx}`, text: b?.buttonTitle ?? '' }))
             }
-            console.log('sendButtons=>dto', buttonsSend)
             let response = await data.client.sendText(recipient, description, buttonsSend)
             return res.status(200).json({
                 result: 200,
