@@ -554,6 +554,7 @@ export default class Events {
 
                     case 'buttons':
                     case 'buttons_response':
+                    case 'template_button_reply':
                         response = {
                             "wook": 'RECEIVE_MESSAGE',
                             "type": 'buttons_response',
@@ -565,7 +566,7 @@ export default class Events {
                             "sender": message.to.split('@')[0],
                             "phone": message.from.split('@')[0],
                             "content": message.body,
-                            "selectedButtonId": message.selectedButtonId,
+                            "selectedButtonId": message.selectedId,
                             "status": "RECEIVED",
                             "timestamp": message.timestamp,
                         }

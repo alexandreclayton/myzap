@@ -250,12 +250,16 @@ export default class Commands {
     let data = Sessions.getSession(req.body.session)
     try {
       let number = req.body.number + '@c.us';
-      let profile = await data.client.getNumberProfile(number)
-      if (profile.numberExists) {
+      const response = await data.client.checkNumberStatus(number)
+      if (response.numberExists) {
         return res.status(200).json({
           "result": 200,
           "messages": "SUCCESS",
-          "profile": profile
+          "server": response.id.server,
+          "phone": response.id.user,
+          "isBusiness": response.isBusiness,
+          "canReceiveMessage": response.canReceiveMessage,
+          "profile": response
         })
       }
     } catch (error) {
@@ -403,12 +407,14 @@ export default class Commands {
     let data = Sessions.getSession(req.body.session)
     let number = req.body.number + '@c.us';
     try {
-      const response = await data.client.getNumberProfile(number);
+      const response = await data.client.checkNumberStatus(number);
       return res.status(200).json({
         "result": 200,
         "messages": "SUCCESS",
+        "server": response.id.server,
         "phone": response.id.user,
-        "isBusiness": response.isBusiness
+        "isBusiness": response.isBusiness,
+        "canReceiveMessage": response.canReceiveMessage,
       })
     } catch (error) {
       return res.status(400).json({
