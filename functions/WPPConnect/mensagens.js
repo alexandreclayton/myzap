@@ -661,35 +661,14 @@ export default class Mensagens {
 
         try {
             const buttonsSend = {
+                useTemplateButtons: true, // False for legacy
                 title,
                 footer: '',
-                buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id${idx}`, text: b?.buttonTitle ?? '' }))
-            }
-            const buttonsSend2 = {
-                title: 'BOTAO TESTE',
-                footer: 'Escolha uma opção abaixo',
-                isDynamicReplyButtonsMsg: true,
-                dynamicReplyButtons: [
-                    {
-                        buttonId: 'idSim',
-                        buttonText: {
-                            displayText: 'SIM',
-                        },
-                        type: 1,
-                    },
-                    {
-                        buttonId: 'idNao',
-                        buttonText: {
-                            displayText: 'NÃO',
-                        },
-                        type: 1,
-                    },
-                ],
-            }
+                buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id@${idx}`, text: b?.buttonTitle ?? '' }))
+            }            
             let response = await data.client.sendText(recipient, description, buttonsSend)
-            // let response = await data.client.sendMessageOptions(recipient, description, buttonsSend2)
             
-            console.dir(response, { depth: null })
+            // console.dir(response, { depth: null })
             return res.status(200).json({
                 result: 200,
                 type: 'buttons',
