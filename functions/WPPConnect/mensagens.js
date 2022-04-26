@@ -224,6 +224,7 @@ export default class Mensagens {
             })
         }
     }
+
     static async sendFile64(req, res) {
         if (!req.body.path) {
             return res.status(400).send({
@@ -686,4 +687,5 @@ export default class Mensagens {
         }
 
     }
+    
 }

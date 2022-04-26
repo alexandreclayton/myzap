@@ -122,8 +122,6 @@ export default class Auth {
             })
         }
     }
-    
-
 
     static async logoutSession(req, res) {
         let data = Sessions.getSession(req.body.session)
@@ -140,8 +138,6 @@ export default class Auth {
             });
         }
     }
-
-
 
     static async closeSession(req, res) {
         let session = req.body.session;
@@ -230,6 +226,7 @@ export default class Auth {
             });
         }
     }
+
     static async showAllSessions(req, res) {
         // let data = Sessions.getAll();
         // const allSessions = data.forEach(element => {
@@ -249,5 +246,5 @@ export default class Auth {
         // console.log(allSessions);
         // return res.status(200).json(allSessions);
     }
-}
 
+}
