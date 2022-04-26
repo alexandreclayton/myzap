@@ -91,5 +91,4 @@ Router.post('/blockContact', checkParams, checkNumber, Commands.blockContact);
 Router.post('/unblockContact', checkParams, checkNumber, Commands.unblockContact);
 Router.post('/getNumberProfile', checkParams, checkNumber, Commands.getNumberProfile);
 
-
 export default { Router };
