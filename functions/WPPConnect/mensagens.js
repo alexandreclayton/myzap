@@ -58,19 +58,16 @@ export default class Mensagens {
                     message: "Informe o caminho da imagem. Exemplo: C:\\folder\\image.jpg caso a imagem esteja local ou uma URL caso a imagem a ser enviada esteja na internet"
                 });
             }
-
             let response = await data.client.sendImage(number, path, 'imagem', caption)
-            console.log(response)
             return res.status(200).json({
                 result: 200,
                 type: 'image',
-                messageId: response._serialized,
-                session: req.body.session,
-                from: response.me.wid._serialized.split('@')[0],
-                to: response.to.remote.user,
-                file: req.body.url,
-                mimetype: response.mimeType,//ok
-
+                messageId: response?.id ?? '',
+                session: req?.body?.session ?? '',
+                from: '',
+                to: req?.body?.number ?? '',
+                file: path,
+                caption
             })
         } catch (error) {
             return res.status(500).json({
