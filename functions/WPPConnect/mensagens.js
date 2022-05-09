@@ -663,9 +663,9 @@ export default class Mensagens {
                 title,
                 footer: '',
                 buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id@${idx}`, text: b?.buttonTitle ?? '' }))
-            }            
+            }
             let response = await data.client.sendText(recipient, description, buttonsSend)
-            
+
             // console.dir(response, { depth: null })
             return res.status(200).json({
                 result: 200,
@@ -684,5 +684,51 @@ export default class Mensagens {
         }
 
     }
-    
+
+    static async sendMessageWithThumb(req, res) {
+        const {
+            session, number, isGroup, thumb, url, title, description,
+        } = req?.body ?? {}
+        const data = Sessions.getSession(session)
+        const isURL = await urlExists(url);
+        const recipient = isGroup === true ? number + '@g.us' : req.body.number + '@c.us';
+        // * Validations
+        if (!url) {
+            return res.status(400).json({
+                status: 400,
+                error: "URL não foi informada, é obrigatorio"
+            })
+        }
+        if (!isURL) {
+            return res.status(400).json({
+                status: 400,
+                error: "Link informado é invalido"
+            })
+        }
+        if (!thumb) {
+            return res.status(400).json({
+                status: 400,
+                error: "Thumb informado é invalido"
+            })
+        }
+        try {
+            // ? Params: thumb: string, url: string, title: string, description: string, chatId: string
+            const response = await data.client.sendMessageWithThumb(thumb, url, title, description, recipient)
+            console.log(response, thumb)
+            return res.status(200).json({
+                result: 200,
+                type: 'link_thumb',
+                messageId: response?.id ?? 0,
+                session: session ?? '',
+                data: response ?? {}
+            })
+        } catch (error) {
+            return res.status(400).json({
+                result: 400,
+                "status": "FAIL",
+                "log": error
+            })
+        }
+    }
+
 }

@@ -51,6 +51,7 @@ Router.post('/getAllUnreadMessages', checkParams, Commands.getAllUnreadMessages)
 Router.post('/getOrderbyMsg', checkParams, Mensagens.getOrderbyMsg);
 Router.post('/sendListMenu', checkParams, checkNumber, Mensagens.sendListMenu);
 Router.post('/sendButtons', checkParams, checkNumber, Mensagens.sendButtons);
+Router.post('/sendMessageWithThumb', checkParams, checkNumber, Mensagens.sendMessageWithThumb);
 
 //* Grupos
 Router.post('/getAllGroups', checkParams, Groups.getAllGroups);
