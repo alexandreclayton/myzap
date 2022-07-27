@@ -11,9 +11,9 @@ import config from '../config.js';
 export default class Events {
 
     static async receiveMessage(session, client) {
-        //* 1 - para WhatsApp-Web-JS  / 2 - para WPPCONNECT / 3 - para VENOM
+        // * 1 - para WhatsApp-Web-JS
         if (config.engine === '1') {
-            client.on('message', async(message) => {
+            client.on('message', async (message) => {
                 let type = message.type
 
                 let response = []
@@ -37,8 +37,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "status": "RECEIVED",
                             "timestamp": message.timestamp,
@@ -57,8 +57,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -79,8 +79,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -101,8 +101,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "file": fileName,
                             "status": "RECEIVED",
@@ -121,8 +121,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "file": fileName,
                             "status": "RECEIVED",
@@ -141,8 +141,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -160,8 +160,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "loc": message.loc,
                             "lat": message.lat,
@@ -183,8 +183,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -202,8 +202,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "thumbnail": message.thumbnail,
                             "title": message.title,
                             "description": message.description,
@@ -221,8 +221,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "contactName": message.vcardFormattedName,
                             "contactVcard": message.body,
                             "status": "RECEIVED",
@@ -239,8 +239,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": '',
                             "status": "RECEIVED",
                             "timestamp": message.timestamp,
@@ -257,8 +257,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "listResponse": {
                                 ...message.listResponse,
@@ -278,8 +278,8 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "selectedButtonId": message.selectedButtonId,
                             "status": "RECEIVED",
@@ -290,8 +290,11 @@ export default class Events {
                 await webhooks.wh_messages(session, response)
             });
 
-        } else {
+        }
+        // * 2 - para WPPCONNECT
+        if (config.engine === '2') {
             await client.onMessage(async message => {
+                console.dir(message, { depth: null })
                 let type = message.type
                 if (type == 'chat' && message.subtype == 'url') {
                     type = 'link'
@@ -319,8 +322,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "status": "RECEIVED",
                             "timestamp": message.timestamp,
@@ -339,8 +343,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -361,8 +366,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -383,8 +389,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "file": fileName,
                             "status": "RECEIVED",
@@ -403,8 +410,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "file": fileName,
                             "status": "RECEIVED",
@@ -423,8 +431,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -442,8 +451,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "loc": message.loc,
                             "lat": message.lat,
@@ -465,8 +475,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "mimetype": message.mimetype,
                             "caption": message.caption != undefined ? message.caption : "",
                             "file": fileName,
@@ -484,8 +495,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "thumbnail": message.thumbnail,
                             "title": message.title,
                             "description": message.description,
@@ -503,8 +515,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "contactName": message.vcardFormattedName,
                             "contactVcard": message.body,
                             "status": "RECEIVED",
@@ -521,8 +534,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": '',
                             "status": "RECEIVED",
                             "timestamp": message.timestamp,
@@ -540,8 +554,9 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
                             "content": message.body,
                             "listResponse": {
                                 ...message.listResponse,
@@ -563,8 +578,313 @@ export default class Events {
                             "session": session,
                             "isGroupMsg": message.isGroupMsg,
                             "author": message.author ? message.author : null,
-                            "sender": message.to.split('@')[0],
-                            "phone": message.from.split('@')[0],
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "sender": message.sender,
+                            "content": message.body,
+                            "selectedButtonId": message.selectedId,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+                }
+
+                await webhooks.wh_messages(session, response)
+
+            })
+        }
+        // * 3 - para VENOM
+        if (config.engine === '3') {
+            await client.onMessage(async message => {
+                console.dir(message, { depth: null })
+                let type = message.type
+                if (type == 'chat' && message.subtype == 'url') {
+                    type = 'link'
+                } else if (type == 'chat' && !message.subtype) {
+                    type = 'text'
+                }
+                let response = { error: "Not implemented yet", message }
+                if (message.isMedia === true || message.isMMS === true || message.type == 'document' || message.type == 'ptt' || message.type == 'sticker') {
+                    var buffer = await client.decryptFile(message);
+                    var telefone = ((String(`${message.from}`).split('@')[0]).substr(2));
+                    let date_ob = new Date();
+                    let date = ("0" + date_ob.getDate()).slice(-2);
+                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                    let year = date_ob.getFullYear();
+                    let miliseconds = date_ob.getMilliseconds();
+                    var fileName = `${telefone}-${year}${month}${date}-${miliseconds}.${mime.extension(message.mimetype)}`;
+                }
+                switch (type) {
+
+                    case 'text':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'text',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'image':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'image',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "caption": message.caption != undefined ? message.caption : "",
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'sticker':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'sticker',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "caption": message.caption != undefined ? message.caption : "",
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'audio':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'audio',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "mimetype": message.mimetype,
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'ptt':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'ptt',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "mimetype": message.mimetype,
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'video':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'video',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "caption": message.caption != undefined ? message.caption : "",
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'location':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'location',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "loc": message.loc,
+                            "lat": message.lat,
+                            "lng": message.lng,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'document':
+                        fs.writeFileSync(`files-received/${fileName}`, buffer, (err) => {
+                            console.log('arquivo baixado!')
+                        });
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'document',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "mimetype": message.mimetype,
+                            "caption": message.caption != undefined ? message.caption : "",
+                            "file": fileName,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'link':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'link',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "thumbnail": message.thumbnail,
+                            "title": message.title,
+                            "description": message.description,
+                            "url": message.body,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'vcard':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'vcard',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "contactName": message.vcardFormattedName,
+                            "contactVcard": message.body,
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'order':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'order',
+                            "id": message.id,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": '',
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+
+                        break;
+
+                    case 'list':
+                    case 'list_response':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'list_response',
+                            "id": message.id,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "content": message.body,
+                            "listResponse": {
+                                ...message.listResponse,
+                                selectedRowId: message.listResponse.singleSelectReply.selectedRowId
+                            },
+                            "status": "RECEIVED",
+                            "timestamp": message.timestamp,
+                        }
+                        break;
+
+                    case 'buttons':
+                    case 'buttons_response':
+                    case 'template_button_reply':
+                        response = {
+                            "wook": 'RECEIVE_MESSAGE',
+                            "type": 'buttons_response',
+                            "id": message.id,
+                            "replyId": message.quotedStanzaId || message.quotedStanzaID,
+                            "session": session,
+                            "isGroupMsg": message.isGroupMsg,
+                            "author": message.author ? message.author : null,
+                            "notifyName": message.notifyName,
+                            "to": message.to.split('@')[0],
+                            "from": message.from.split('@')[0],
+                            "sender": message.sender,
                             "content": message.body,
                             "selectedButtonId": message.selectedId,
                             "status": "RECEIVED",
@@ -581,7 +901,7 @@ export default class Events {
 
     static statusMessage(session, client) {
         if (config.engine === '1') {
-            client.on('message_ack', async(message, ack) => {
+            client.on('message_ack', async (message, ack) => {
                 let type = message.type
 
                 let status
