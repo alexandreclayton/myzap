@@ -662,7 +662,12 @@ export default class Mensagens {
                 useTemplateButtons: true, // False for legacy
                 title,
                 footer: '',
-                buttons: buttons.map((b, idx) => ({ id: b?.id ?? `id@${idx}`, text: b?.buttonTitle ?? '' }))
+                buttons: buttons.map((b, idx) => ({ 
+                    id: b?.buttonId ?? `id@${idx}`, 
+                    url: b?.buttonUrl ?? undefined, 
+                    phoneNumber: b?.buttonPhoneNumber ?? undefined, 
+                    text: b?.buttonTitle ?? '' 
+                }))
             }
             let response = await data.client.sendText(recipient, description, buttonsSend)
 
