@@ -3,3 +3,4 @@ tokens/
 .env
 .env*
 teste.js
+buildImage.sh
