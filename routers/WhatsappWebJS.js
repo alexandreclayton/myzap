@@ -8,7 +8,7 @@ import express from 'express';
 const Router = express.Router();
 import engine from '../engines/WhatsappWebJS.js';
 import Sessions from '../controllers/sessions.js';
-import Commands from '../functions/WhatsappWebJS/commands';
+import Commands from '../functions/WhatsappWebJS/commands.js';
 import Mensagens from '../functions/WhatsappWebJS/mensagens.js';
 import Status from '../functions/WhatsappWebJS/status.js';
 import Auth from '../functions/WPPConnect/auth.js';

@@ -252,11 +252,15 @@ export default class Commands {
       if (!session) throw new Error(`Session "${session}" is invalid!`)
       const data = Sessions.getSession(session)
       const number = req?.body?.number ?? ''
+      console.log(`Get Contact to number: ${number}`)
       const response = await data.client.getContact(number + '@c.us')
-      return res.status(200).json({
+      console.dir(response, { depth: null })
+      const responseStatus = !response ? 400 : 200
+      return res.status(responseStatus).json({
         ...response,
-        "result": 200,
-        "messages": "SUCCESS",
+        "id": response?.id?.user ?? '',
+        "result": responseStatus,
+        "messages": responseStatus == 200 ? "SUCCESS" : "NOT LOCALIZED",
       })
     } catch (error) {
       return res.status(400).json({
