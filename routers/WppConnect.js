@@ -20,6 +20,7 @@ import database from'../firebase/functions.js';
 import { setDoc, doc, db} from'../firebase/db.js';
 
 Router.post('/start', Auth.start)
+
 //* Sessões 
 Router.post('/logout', checkParams, Auth.logoutSession);
 Router.post('/close', checkParams, Auth.closeSession);
@@ -80,7 +81,9 @@ Router.post('/getHostDevice', checkParams, Commands.getHostDevice);
 Router.post('/getAllContacts', checkParams, Commands.getAllContacts);
 Router.post('/getBlockList', checkParams, Commands.getBlockList);
 
+// * Contact
 Router.post('/getProfilePic', checkParams, checkNumber, Commands.getProfilePic);
+Router.post('/getContact', checkParams, checkNumber, Commands.getContact);
 Router.post('/verifyNumber', checkParams, checkNumber, Commands.verifyNumber);
 Router.post('/deleteChat', checkParams, checkNumber, Commands.deleteChat);
 Router.post('/clearChat', checkParams, checkNumber, Commands.clearChat);

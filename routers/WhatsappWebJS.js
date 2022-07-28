@@ -4,18 +4,19 @@
  * @Date: 2021-05-10 18:09:49
  * @LastEditTime: 2021-06-07 03:18:01
  */
-import express from'express';
-const Router =  express.Router();
-import engine from'../engines/WhatsappWebJS.js';
-import Sessions from'../controllers/sessions.js';
-import Mensagens from'../functions/WhatsappWebJS/mensagens.js';
-import Status from'../functions/WhatsappWebJS/status.js';
-import Auth from'../functions/WPPConnect/auth.js';
-import config from'../config.js';
-import { checkParams } from'../middlewares/validations.js';
-import { checkNumber } from'../middlewares/checkNumber.js';
-import {snapshot, setDoc, doc, db} from'../firebase/db.js';
-import database from'../firebase/functions.js';
+import express from 'express';
+const Router = express.Router();
+import engine from '../engines/WhatsappWebJS.js';
+import Sessions from '../controllers/sessions.js';
+import Commands from '../functions/WhatsappWebJS/commands';
+import Mensagens from '../functions/WhatsappWebJS/mensagens.js';
+import Status from '../functions/WhatsappWebJS/status.js';
+import Auth from '../functions/WPPConnect/auth.js';
+import config from '../config.js';
+import { checkParams } from '../middlewares/validations.js';
+import { checkNumber } from '../middlewares/checkNumber.js';
+import { snapshot, setDoc, doc, db } from '../firebase/db.js';
+import database from '../firebase/functions.js';
 
 Router.post('/start', async (req, res) => {
     try {
@@ -161,7 +162,7 @@ Router.post('/sendTextToStorie', Status.sendTextToStorie);
 //Router.post('/sendImageToStorie', Status.sendImageToStorie);
 //Router.post('/sendVideoToStorie', Status.sendVideoToStorie);
 
-// // Dispositivo, chats entre outras
+// * Contact
 // Router.post('/getBatteryLevel', Commands.getBatteryLevel);
 // Router.post('/getConnectionState', Commands.getConnectionState);
 // Router.post('/getHostDevice', Commands.getHostDevice);
@@ -169,6 +170,7 @@ Router.post('/sendTextToStorie', Status.sendTextToStorie);
 // Router.post('/getBlockList', Commands.getBlockList);
 // Router.post('/getMessagesChat', Commands.getMessagesChat);
 // Router.post('/getProfilePic', Commands.getProfilePic);
+Router.post('/getContact', checkParams, checkNumber, Commands.getContact);
 // Router.post('/verifyNumber', Commands.verifyNumber);
 // Router.post('/deleteChat', Commands.deleteChat);
 // Router.post('/clearChat', Commands.clearChat);
@@ -181,4 +183,4 @@ Router.post('/sendTextToStorie', Status.sendTextToStorie);
 // Router.post('/unblockContact', Commands.unblockContact);
 // Router.post('/getNumberProfile', Commands.getNumberProfile);
 
-export default {Router};
+export default { Router };

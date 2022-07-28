@@ -93,5 +93,6 @@ Router.post('/markUnseenMessage', checkParams, checkNumber, Commands.markUnseenM
 Router.post('/blockContact', checkParams, checkNumber, Commands.blockContact);
 Router.post('/unblockContact', checkParams, checkNumber, Commands.unblockContact);
 Router.post('/getNumberProfile', checkParams, checkNumber, Commands.getNumberProfile);
+Router.post('/getContact', checkParams, checkNumber, Commands.getContact);
 
 export default { Router };

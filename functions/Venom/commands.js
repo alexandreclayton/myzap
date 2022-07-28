@@ -74,7 +74,7 @@ export default class Commands {
         try {
             let data = Sessions.getSession(req.body.session)
             let response = await data.client.getAllContacts()
-            let contacts = response.map(function(data) {
+            let contacts = response.map(function (data) {
                 return {
                     'name': data.name ? data.name : '',
                     'realName': data.pushname ? data.pushname : '',
@@ -179,7 +179,7 @@ export default class Commands {
         try {
             let data = Sessions.getSession(req.body.session)
             let response = await data.client.getBlockList()
-            let blkcontacts = response.map(function(data) {
+            let blkcontacts = response.map(function (data) {
                 return {
                     'phone': data ? data.split('@')[0] : '',
                 }
@@ -203,7 +203,7 @@ export default class Commands {
         let number = req.body.number + '@c.us';
         try {
             let response = await data.client.loadAndGetAllMessagesInChat(number, true)
-            let messages = response.map(function(data) {
+            let messages = response.map(function (data) {
                 console.log(data)
                 return {
                     "type": data.type,
@@ -416,6 +416,35 @@ export default class Commands {
                 "error": error
             })
         }
+    }
+
+    static async getContact(req, res) {
+
+        return res.status(400).json({
+            "result": 400,
+            "status": "FAIL",
+            "error": "Not implementd"
+        })
+        /*
+        try {
+            const session = req?.body?.session ?? ''
+            if (!session) throw new Error(`Session "${session}" is invalid!`)
+            const data = Sessions.getSession(session)
+            const number = req?.body?.number ?? ''
+            const response = await data.client.getContact(number + '@c.us')
+            return res.status(200).json({
+                ...response,
+                "result": 200,
+                "messages": "SUCCESS",
+            })
+        } catch (error) {
+            return res.status(400).json({
+                "result": 400,
+                "status": "FAIL",
+                "error": error
+            })
+        }
+        */
     }
 
 }
