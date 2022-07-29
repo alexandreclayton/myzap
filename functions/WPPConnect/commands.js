@@ -258,7 +258,7 @@ export default class Commands {
       const responseStatus = !response ? 400 : 200
       return res.status(responseStatus).json({
         ...response,
-        "id": response?.id?.user ?? '',
+        "id": ((response?.id?.user ?? '') + (response?.id?.server ?? '')) ?? '',
         "result": responseStatus,
         "messages": responseStatus == 200 ? "SUCCESS" : "NOT LOCALIZED",
       })
