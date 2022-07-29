@@ -204,7 +204,7 @@ export default class Commands {
     try {
       let response = await data.client.loadAndGetAllMessagesInChat(number, true)
       let messages = response.map(function (data) {
-        console.log(data)
+        // console.log(data)
         return {
           "type": data.type,
           "author": data.verifiedName,
@@ -252,9 +252,9 @@ export default class Commands {
       if (!session) throw new Error(`Session "${session}" is invalid!`)
       const data = Sessions.getSession(session)
       const number = req?.body?.number ?? ''
-      console.log(`Get Contact to number: ${number}`)
+      // console.log(`Get Contact to number: ${number}`)
       const response = await data.client.getContact(number + '@c.us')
-      console.dir(response, { depth: null })
+      // console.dir(response, { depth: null })
       const responseStatus = !response ? 400 : 200
       return res.status(responseStatus).json({
         ...response,

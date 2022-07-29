@@ -294,7 +294,7 @@ export default class Events {
         // * 2 - para WPPCONNECT
         if (config.engine === '2') {
             await client.onMessage(async message => {
-                console.dir(message, { depth: null })
+                // console.dir(message, { depth: null })
                 let type = message.type
                 if (type == 'chat' && message.subtype == 'url') {
                     type = 'link'
@@ -597,7 +597,7 @@ export default class Events {
         // * 3 - para VENOM
         if (config.engine === '3') {
             await client.onMessage(async message => {
-                console.dir(message, { depth: null })
+                // console.dir(message, { depth: null })
                 let type = message.type
                 if (type == 'chat' && message.subtype == 'url') {
                     type = 'link'
