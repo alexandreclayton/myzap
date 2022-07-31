@@ -1,5 +1,9 @@
 FROM ubuntu:18.04 AS sn-zap-stage-base
 WORKDIR /usr/src/app
+
+ENV TZ="America/Recife"
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y \
 	gconf-service \
 	libasound2 \
@@ -42,8 +46,8 @@ RUN apt-get update && apt-get install -y \
 	apt-transport-https \
 	libgbm-dev \
 	git \
-	vim \
-	tzdata -y
+	vim
+RUN apt-get install -y --no-install-recommends tzdata
 
 RUN apt-get install curl -y \
 	&& curl -sL https://deb.nodesource.com/setup_16.x | bash - \
@@ -51,8 +55,6 @@ RUN apt-get install curl -y \
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
 	&& apt install -y ./google-chrome-stable_current_amd64.deb
-
-ENV TZ="America/Recife"
 
 CMD bash
 
