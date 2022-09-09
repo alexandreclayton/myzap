@@ -662,11 +662,11 @@ export default class Mensagens {
                 useTemplateButtons: true, // False for legacy
                 title,
                 footer: '',
-                buttons: buttons.map((b, idx) => ({ 
-                    id: b?.buttonId ?? `id@${idx}`, 
-                    url: b?.buttonUrl ?? undefined, 
-                    phoneNumber: b?.buttonPhoneNumber ?? undefined, 
-                    text: b?.buttonTitle ?? '' 
+                buttons: buttons.map((b, idx) => ({
+                    id: b?.buttonId ?? `id@${idx}`,
+                    url: b?.buttonUrl ?? undefined,
+                    phoneNumber: b?.buttonPhoneNumber ?? undefined,
+                    text: b?.buttonTitle ?? ''
                 }))
             }
             let response = await data.client.sendText(recipient, description, buttonsSend)
@@ -717,9 +717,19 @@ export default class Mensagens {
             })
         }
         try {
-            // ? Params: thumb: string, url: string, title: string, description: string, chatId: string
-            const response = await data.client.sendMessageWithThumb(thumb, url, title, description, recipient)
-            console.log(response, thumb)
+            // ? sendMessageWithThumb(pathOrBase64: string, url: string, title: string, description: string, chatId: string): Promise<SendMessageReturn>
+            // const response = await data.client.sendMessageWithThumb(thumb, url, title, description, recipient)
+            const response = await data.client.sendTextMessage(recipient, url, {
+                linkPreview: {
+                    thumbnail: thumb,
+                    canonicalUrl: url,
+                    description,
+                    matchedText: url,
+                    title,
+                    richPreviewType: 0,
+                    doNotPlayInline: true,
+                }
+            })
             return res.status(200).json({
                 result: 200,
                 type: 'link_thumb',
