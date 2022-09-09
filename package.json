@@ -1,7 +1,7 @@
 {
     "name": "myzap2.0",
     "description": "<h1 align=\"center\">\r     <a href=\"\">🔗 MyZAP</a>\r </h1>\r <p align=\"center\">🚀 Permite a integração do WhatsApp com qualquer aplicação por meio de requisições POST/GET</p>",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "main": "index.js",
     "type": "module",
     "scripts": {
