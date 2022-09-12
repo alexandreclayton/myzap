@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose up --build myzap_2dev
+docker-compose up --build sn-zap-api 

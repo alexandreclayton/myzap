@@ -716,10 +716,56 @@ export default class Mensagens {
                 error: "Thumb informado é invalido"
             })
         }
+        let response = null
         try {
-            // ? sendMessageWithThumb(pathOrBase64: string, url: string, title: string, description: string, chatId: string): Promise<SendMessageReturn>
-            // const response = await data.client.sendMessageWithThumb(thumb, url, title, description, recipient)
-            const response = await data.client.sendTextMessage(recipient, url, {
+
+            /*
+            let base64: string = '';
+
+            if (thumb.startsWith('data:')) {
+            base64 = thumb;
+            } else {
+            let fileContent = await downloadFileToBase64(thumb, [
+                'image/gif',
+                'image/png',
+                'image/jpg',
+                'image/jpeg',
+                'image/webp',
+            ]);
+            if (!fileContent) {
+                fileContent = await fileToBase64(thumb);
+            }
+            if (fileContent) {
+                base64 = fileContent;
+            }
+            }
+
+            if (!base64) {
+            const error = new Error('Empty or invalid file or base64');
+            Object.assign(error, {
+                code: 'empty_file',
+            });
+            throw error;
+            }
+
+            const mimeInfo = base64MimeType(base64);
+
+            if (!mimeInfo || !mimeInfo.includes('image')) {
+            const error = new Error(
+                'Not an image, allowed formats png, jpeg, webp and gif'
+            );
+            Object.assign(error, {
+                code: 'invalid_image',
+            });
+            throw error;
+            }
+
+            const thumbnail = base64.replace(
+            /^data:image\/(png|jpe?g|webp|gif);base64,/,
+            ''
+            );
+
+            response = await data.client.sendText(recipient, url, {
                 linkPreview: {
                     thumbnail: thumb,
                     canonicalUrl: url,
@@ -730,6 +776,11 @@ export default class Mensagens {
                     doNotPlayInline: true,
                 }
             })
+            */
+
+            // ? sendMessageWithThumb(pathOrBase64: string, url: string, title: string, description: string, chatId: string): Promise<SendMessageReturn>
+            response = await data.client.sendMessageWithThumb(thumb, url, title, description, recipient)  
+
             return res.status(200).json({
                 result: 200,
                 type: 'link_thumb',
@@ -741,7 +792,8 @@ export default class Mensagens {
             return res.status(400).json({
                 result: 400,
                 "status": "FAIL",
-                "log": error
+                "log": error,
+                "response": response
             })
         }
     }
