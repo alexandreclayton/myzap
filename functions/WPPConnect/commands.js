@@ -254,7 +254,7 @@ export default class Commands {
       const number = req?.body?.number ?? ''
       // console.log(`Get Contact to number: ${number}`)
       const response = await data.client.getContact(number + '@c.us')
-      // console.dir(response, { depth: null })
+      console.dir(response, { depth: null })
       const responseStatus = !response ? 400 : 200
       return res.status(responseStatus).json({
         ...response,

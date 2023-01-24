@@ -6,10 +6,10 @@
  */
 import Sessions from '../controllers/sessions.js';
 import superagent from 'superagent';
-import 'superagent-queue';
+// import 'superagent-queue';
 import dotenv from 'dotenv'
 dotenv.config();
-//require('superagent-queue');
+require('superagent-queue');
 //require('dotenv').config();
 
 export default class Webhooks {
@@ -125,5 +125,5 @@ export default class Webhooks {
             console.log(error)
         }
     }
-    
+
 }
