@@ -18,11 +18,11 @@ export default class Wppconnect {
         try {
             const client = await wppconnect.create({
                 session: session,
-                tokenStore: 'memory',
-                // folderNameToken: './tokens',
-                catchQR: (base64Qrimg, ascii) => {
+                // tokenStore: 'memory',
+                folderNameToken: './tokens',
+                catchQR: async (base64Qrimg, ascii) => {
                     webhooks.wh_qrcode(session, base64Qrimg)
-                    this.exportQR(req, res, base64Qrimg, session);
+                    await this.exportQR(req, res, base64Qrimg, session);
                     Sessions.addInfoSession(session, {
                         qrCode: base64Qrimg
                     })
@@ -128,7 +128,7 @@ export default class Wppconnect {
         }
         return false
     }
-    
+
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');
@@ -161,5 +161,5 @@ export default class Wppconnect {
             }
         })
     }
-    
+
 }

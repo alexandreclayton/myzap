@@ -39,24 +39,26 @@ export default class Auth {
                             })
                         }
                     }
-    
+
                     async function init(session) {
                         let sessionInfo = {
-                            session,
-                            apitoken: req.headers['apitoken'],
-                            sessionkey: req.headers['sessionkey'],
-                            wh_status: req.body.wh_status,
-                            wh_message: req.body.wh_message,
-                            wh_qrcode: req.body.wh_qrcode,
-                            wh_connect: req.body.wh_connect,
-                            wa_browser_id: req.headers['wa_browser_id'] ? req.headers['wa_browser_id'] : '',
-                            wa_secret_bundle: req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
-                            wa_token_1: req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
-                            wa_token_2: req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
+													  'session': session,
+                            'apitoken': req.headers['apitoken'],
+                            'sessionkey': req.headers['sessionkey'],
+                            'wh_status': req.body.wh_status,
+                            'wh_message': req.body.wh_message,
+                            'wh_qrcode': req.body.wh_qrcode,
+                            'wh_connect': req.body.wh_connect,
+                            'wa_browser_id': req.headers['wa_browser_id'] ? req.headers['wa_browser_id'] : '',
+                            'wa_secret_bundle': req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
+                            'wa_token_1': req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
+                            'wa_token_2': req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
                         }
-                        Sessions.checkAddUser(session)
+												Sessions.checkAddUser(session)
                         Sessions.addInfoSession(session, sessionInfo)
-    
+
+												// const currentSession = Sessions.getSession(session)
+
                         let response = await engine.start(req, res, session)
                         if (response != undefined) {
                             /*
@@ -76,7 +78,7 @@ export default class Auth {
                             }
                             */
                             const {
-                                client, 
+                                client,
                                 tokens: { WABrowserId = '', WASecretBundle = '', WAToken1 = '', WAToken2 = '' },
                             } = response
                             sessionInfo = {
@@ -87,16 +89,16 @@ export default class Auth {
                                 'WAToken2': WAToken2 ? WAToken2?.replaceAll('"', '') : sessionInfo.wa_token_2,
                                 'Engine': process.env.ENGINE
                             }
-    
+
                             await setDoc(doc(db, "Sessions", session), sessionInfo);
-    
+
                             res.status(200).json({
                                 "result": 200,
                                 "status": "CONNECTED",
                                 "response": `Sessão ${session} gravada com sucesso no Firebase`,
                                 sessionInfo
                             })
-    
+
                         }
                     }
                 }
@@ -113,7 +115,7 @@ export default class Auth {
                     })
                 }
             }
-    
+
         } catch (error) {
             res.status(500).json({
                 result: 500,
