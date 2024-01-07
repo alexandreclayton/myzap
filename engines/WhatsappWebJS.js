@@ -6,14 +6,14 @@
  */
 import { doc, db, getDoc } from '../firebase/db.js';
 import { Client } from "whatsapp-web.js";
-import qrcode from'qrcode-terminal';
-import qrcodeBase64 from'qrcode';
-import { Launcher } from'chrome-launcher';
+import qrcode from 'qrcode-terminal';
+import qrcodeBase64 from 'qrcode';
+import { Launcher } from 'chrome-launcher';
 let chromeLauncher = Launcher.getInstallations()[0];
-import Sessions from'../controllers/sessions.js';
-import events from'../controllers/events.js';
-import webhooks from'../controllers/webhooks.js';
-import config from'../config.js';
+import Sessions from '../controllers/sessions.js';
+import events from '../controllers/events.js';
+import webhooks from '../controllers/webhooks.js';
+import config from '../config.js';
 
 export default class WhatsappWebJS {
     static async start(req, res, session) {
@@ -22,8 +22,7 @@ export default class WhatsappWebJS {
                 var useHere;
                 if (config.useHere === 'true') {
                     useHere = false
-                }
-                else {
+                } else {
                     if (config.useHere != 'true') {
                         useHere = true
                     }
@@ -34,28 +33,48 @@ export default class WhatsappWebJS {
                 const Session = doc(db, "Sessions", session);
                 const dados = await getDoc(Session);
                 if (dados.exists() && dados.data().engine === process.env.ENGINE) {
-                    console.log(`****** STARTING SESSION ${session} ******`)
+                    console.log(`****** STARTING SESSION ${session} AND WITH ENGINE ${process.env.ENGINE} ******`)
                     client = new Client({
                         restartOnAuthFail: true,
                         takeoverOnConflict: useHere,
                         puppeteer: {
-                            headless: false,
+                            headless: false,                            
                             args: [
-                                '--no-sandbox',
+                                '--log-level=3',
+                                '--no-default-browser-check',
+                                '--disable-site-isolation-trials',
+                                '--no-experiments',
+                                '--ignore-gpu-blacklist',
+                                '--ignore-certificate-errors',
+                                '--ignore-certificate-errors-spki-list',
+                                '--disable-gpu',
+                                '--disable-extensions',
+                                '--disable-default-apps',
+                                '--enable-features=NetworkService',
                                 '--disable-setuid-sandbox',
-                                '--disable-dev-shm-usage',
+                                '--no-sandbox',
+                                // Extras
+                                '--disable-webgl',
+                                '--disable-threaded-animation',
+                                '--disable-threaded-scrolling',
+                                '--disable-in-process-stack-traces',
+                                '--disable-histogram-customizer',
+                                '--disable-gl-extensions',
+                                '--disable-composited-antialiasing',
+                                '--disable-canvas-aa',
+                                '--disable-3d-apis',
                                 '--disable-accelerated-2d-canvas',
-                                '--no-first-run',
-                                '--no-zygote',
-                                '--single-process',
-                                '--disable-gpu'
+                                '--disable-accelerated-jpeg-decoding',
+                                '--disable-accelerated-mjpeg-decode',
+                                '--disable-app-list-dismiss-on-blur',
+                                '--disable-accelerated-video-decode',
                             ],
                         },
                         session: {
-                            WABrowserId: dados.data().WABrowserId,
-                            WASecretBundle: dados.data().WASecretBundle,
-                            WAToken1: dados.data().WAToken1,
-                            WAToken2: dados.data().WAToken2,
+                            WABrowserId: token.WABrowserId,
+                            WASecretBundle: token.WASecretBundle,
+                            WAToken1: token.WAToken1,
+                            WAToken2: token.WAToken2,
                             engine: process.env.ENGINE
                         }
                     });
@@ -187,11 +206,9 @@ export default class WhatsappWebJS {
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');
-        req.io.emit('qrCode',
-            {
-                data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
-                session: session
-            }
-        );
+        req.io.emit('qrCode', {
+            data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
+            session: session
+        });
     }
 }

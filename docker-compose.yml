@@ -1,34 +1,37 @@
 version: "3.5"
 services:
-  myzap_2dev:
-    build: 
+  sn-zap-api:
+    build:
       context: .
-      target: myzap_2dev
-    container_name: myzap_2dev
+#      target: sn-zap-stage-base
+    container_name: sn-zap-api
     working_dir: /usr/src/app
     volumes:
       - ${PATH_LOCAL}:/usr/src/app
     ports:
-      - ${HOST_PORT}:${HOST_PORT}
+      - ${PORT}:${PORT}
     stdin_open: true # docker run -i
-    tty: true        # docker run -t
+    tty: true # docker run -t
     networks:
       backend:
         aliases:
-          - myzap_2dev
+          - sn-zap-api
 
-  myzap_2prod:
-    build: 
-      context: .
-      target: myzap_2prod
-    container_name: myzap_2prod
+#  myzap_2prod:
+#    build: 
+#      context: .
+#      target: myzap_2prod
+#    container_name: myzap_2prod
 #    image: gcr.io/maisagil/myzap
-    ports:
-      - ${HOST_PORT}:${HOST_PORT}
-    networks:
-      backend:
-        aliases:
-          - myzap_2prod
+#    ports:
+#      - ${HOST_PORT}:${HOST_PORT}
+#    networks:
+#      backend:
+#        aliases:
+#          - myzap_2prod
 networks:
   backend:
-    name: myzap_2network
+    name: sn-zap-api-networks
+
+# Build
+# docker-compose up --build -d

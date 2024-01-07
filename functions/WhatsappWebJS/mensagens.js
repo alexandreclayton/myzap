@@ -483,7 +483,7 @@ export default class Mensagens {
         let data = Sessions.getSession(req.body.session)
         let isGroup = req.body.isGroup;
         let number = isGroup === true ? req.body.number + '@g.us' : req.body.number + '@c.us';
-        
+
         if (!req.body.url) {
             return res.status(400).json({
                 status: 400,

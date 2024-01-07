@@ -24,14 +24,13 @@ export default class Mensagens {
                 status: 400,
                 error: "Text não foi informado"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.sendText(number, req.body.text)
                 return res.status(200).json({
                     result: 200,
                     type: 'text',
-                    messageId: response.to._serialized,//ok
+                    messageId: response.to._serialized, //ok
                     session: req.body.session,
                     data: response
                 })
@@ -58,7 +57,6 @@ export default class Mensagens {
             }
 
             let response = await data.client.sendImage(number, path, 'imagem', caption)
-            console.log(response)
             return res.status(200).json({
                 result: 200,
                 type: 'image',
@@ -298,8 +296,7 @@ export default class Mensagens {
                         "log": e
                     })
                 }
-            }
-            else {
+            } else {
                 return res.status(400).json({
                     result: 400,
                     "status": "FAIL",
@@ -330,8 +327,7 @@ export default class Mensagens {
                         "log": e
                     })
                 }
-            }
-            else {
+            } else {
                 return res.status(400).json({
                     result: 400,
                     "status": "FAIL",
@@ -351,8 +347,7 @@ export default class Mensagens {
                 error: "Path não informado",
                 message: "Informe o path em formato Base64"
             });
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.sendPttFromBase64(number, base64).then((value) => {
                     console.log(value)
@@ -388,15 +383,13 @@ export default class Mensagens {
                 status: 400,
                 error: "URL não foi informada, é obrigatorio"
             })
-        }
-        else
+        } else
             if (!isURL) {
                 return res.status(400).json({
                     status: 400,
                     error: "Link informado é invalido"
                 })
-            }
-            else {
+            } else {
                 try {
                     let response = await data.client.sendLinkPreview(number, req.body.url, req.body.text)
 
@@ -425,14 +418,12 @@ export default class Mensagens {
                 status: 400,
                 error: "Contact não foi informado"
             })
-        }
-        else if (!req.body.name) {
+        } else if (!req.body.name) {
             return res.status(400).json({
                 status: 400,
                 error: "Nome do Contato não foi informado"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.sendContactVcard(number, req.body.contact + '@c.us', req.body.name)
                 return res.status(200).json({
@@ -460,8 +451,7 @@ export default class Mensagens {
                 status: 400,
                 error: "Latitude não foi informada"
             })
-        }
-        else if (!req.body.log) {
+        } else if (!req.body.log) {
             return res.status(400).json({
                 status: 400,
                 error: "Longitude não foi informada"
@@ -472,14 +462,12 @@ export default class Mensagens {
                 status: 400,
                 error: "Title do endereço não foi informado"
             })
-        }
-        else if (!req.body.description) {
+        } else if (!req.body.description) {
             return res.status(400).json({
                 status: 400,
                 error: "Descrição do endereço não foi informado"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.sendLocation(number, req.body.lat, req.body.log, `${req.body.title}\n${req.body.description}`)
                 return res.status(200).json({
@@ -507,14 +495,12 @@ export default class Mensagens {
                 status: 400,
                 error: "Text não foi informado"
             })
-        }
-        else if (!req.body.messageid) {
+        } else if (!req.body.messageid) {
             return res.status(400).json({
                 status: 400,
                 error: "MessageID não foi informada, é obrigatorio"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.reply(number, req.body.text, req.body.messageid);
                 return res.status(200).json({
@@ -542,14 +528,12 @@ export default class Mensagens {
                 status: 400,
                 error: "Text não foi informado"
             })
-        }
-        else if (!req.body.messageid) {
+        } else if (!req.body.messageid) {
             return res.status(400).json({
                 status: 400,
                 error: "MessageID não foi informado, é obrigatorio"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.forwardMessages(number, [req.body.messageid]);
                 return res.status(200).json({
@@ -569,6 +553,7 @@ export default class Mensagens {
             }
         }
     }
+
     static async getOrderbyMsg(req, res) {
         let data = Sessions.getSession(req.body.session)
         if (!req.body.messageid) {
@@ -576,8 +561,7 @@ export default class Mensagens {
                 status: 400,
                 error: "MessageID não foi informado, é obrigatorio"
             })
-        }
-        else {
+        } else {
             try {
                 let response = await data.client.getOrderbyMsg(req.body.messageid);
                 return res.status(200).json({
@@ -596,5 +580,135 @@ export default class Mensagens {
             }
         }
     }
-}
 
+    /*
+    {
+        "session": "",
+        "number": "5581999999999",
+        "title": "Title",
+        "description": "Description",
+        "list": [       
+            {
+                "title": "TITLE SECTION",
+                "rows": [
+                    {
+                        "title": "TITLE ITEM 1",
+                        "description": "description item 1"
+                    },
+                    {
+                        "title": "TITLE ITEM 2",
+                        "description": "description item 2"
+                    }
+                ]
+            }
+        ]
+    }
+    */
+    static async sendListMenu(req, res) {
+        const {
+            isGroup,
+            session,
+            number,
+            title = '',
+            subTitle = '',
+            menu = 'menu',
+            list = [],
+            description = '',
+        } = req.body
+        let data = Sessions.getSession(session)
+        let recipient = isGroup ? number + '@g.us' : number + '@c.us';
+
+        if (!Array.isArray(list) || list.length == 0) {
+            return res.status(400).json({
+                status: 400,
+                error: "Lista de menus inválidos!"
+            })
+        }
+
+        try {
+            let response = await data.client.sendListMenu(recipient, title, subTitle, description, menu, list)
+            return res.status(200).json({
+                result: 200,
+                type: 'text',
+                messageId: response.to._serialized, //ok
+                session: req.body.session,
+                data: response
+            })
+        } catch (error) {
+            return res.status(500).json({
+                result: 500,
+                error: error
+            })
+        }
+
+    }
+
+    /*
+    {
+        "session": "",
+        "number": "5581999999999",
+        "title": "Title",
+        "description": "Description",
+        "buttons": [
+            {
+                "displayText": "Text of Button 1"
+            },
+            {
+                "displayText": "Text of Button 2"
+            }
+        ]
+    }
+    */
+    static async sendButtons(req, res) {
+        const {
+            isGroup,
+            session,
+            number,
+            title = '',
+            buttons = [],
+            description = '',
+        } = req.body
+        let data = Sessions.getSession(session)
+        let recipient = isGroup ? number + '@g.us' : number + '@c.us';
+
+        if (!Array.isArray(buttons) || buttons.length == 0) {
+            return res.status(400).json({
+                status: 400,
+                error: "Lista de botões inválidos!"
+            })
+        }
+
+        const buttonsFormated = buttons.map((b) => ({ buttonText: { displayText: b.buttonTitle } }))
+        const buttonsAA = [
+            {
+              "buttonText": {
+                "displayText": "Text of Button 1"
+                }
+              },
+            {
+              "buttonText": {
+                "displayText": "Text of Button 2"
+                }
+              }
+            ]
+
+        try {
+            console.log('buttonsFormated=>', buttonsFormated)
+            let response = await data.client.sendButtons(recipient, title, buttonsAA, description)
+            return res.status(200).json({
+                result: 200,
+                type: 'text',
+                messageId: response.to._serialized, //ok
+                session: req.body.session,
+                data: response
+            })
+        } catch (error) {
+            return res.status(500).json({
+                result: 500,
+                error: error
+            })
+        }
+
+    }
+
+}

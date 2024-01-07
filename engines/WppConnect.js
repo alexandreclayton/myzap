@@ -5,12 +5,11 @@
  * @LastEditTime: 2021-06-07 03:18:01
  */
 import wppconnect from '@wppconnect-team/wppconnect';
-import Sessions from'../controllers/sessions.js';
-import events from'../controllers/events.js';
-import webhooks from'../controllers/webhooks.js';
+import Sessions from '../controllers/sessions.js';
+import events from '../controllers/events.js';
+import webhooks from '../controllers/webhooks.js';
 import { doc, db, getDoc } from '../firebase/db.js';
-import config from'../config.js';
-
+import config from '../config.js';
 
 export default class Wppconnect {
 
@@ -19,16 +18,16 @@ export default class Wppconnect {
         try {
             const client = await wppconnect.create({
                 session: session,
-                tokenStore: 'memory',
-                catchQR: (base64Qrimg, ascii) => {
+                // tokenStore: 'memory',
+                folderNameToken: './tokens',
+                catchQR: async (base64Qrimg, ascii) => {
                     webhooks.wh_qrcode(session, base64Qrimg)
-                    this.exportQR(req, res, base64Qrimg, session);
+                    await this.exportQR(req, res, base64Qrimg, session);
                     Sessions.addInfoSession(session, {
                         qrCode: base64Qrimg
                     })
                 },
                 statusFind: (statusSession, session) => {
-                    console.log(statusSession)
                     Sessions.addInfoSession(session, {
                         status: statusSession
                     })
@@ -39,7 +38,7 @@ export default class Wppconnect {
                         statusSession === 'qrReadFail' ||
                         statusSession === 'autocloseCalled' ||
                         statusSession === 'serverClose') {
-                        req.io.emit('whatsapp-status', false)  
+                        req.io.emit('whatsapp-status', false)
                     }
                     if (statusSession === 'isLogged' ||
                         statusSession === 'qrReadSuccess' ||
@@ -50,10 +49,13 @@ export default class Wppconnect {
 
                 },
                 headless: true,
+                devtools: false,
+                useChrome: true,
+                debug: false,
                 logQR: true,
                 browserWS: '', //browserless !=  '' ? browserless.replace('https://', 'wss://')+'?token='+token_browser : '',
-                useChrome: true,
                 updatesLog: false,
+                disableWelcome: false,
                 autoClose: 90000,
                 browserArgs: [
                     '--log-level=3',
@@ -85,7 +87,7 @@ export default class Wppconnect {
                     '--disable-app-list-dismiss-on-blur',
                     '--disable-accelerated-video-decode',
                 ],
-
+                puppeteerOptions: { userDataDir: './tokens/' + session }, // Add 27/04/2022
                 createPathFileToken: false,
                 sessionToken: {
                     WABrowserId: token.WABrowserId,
@@ -100,7 +102,7 @@ export default class Wppconnect {
             let info = await client.getWid()
             let tokens = await client.getSessionTokenBrowser()
             let browser = []
-            // browserless != '' ? browserless+'/devtools/inspector.html?token='+token_browser+'&wss='+browserless.replace('https://', '')+':443/devtools/page/'+client.page._target._targetInfo.targetId : null
+                // browserless != '' ? browserless+'/devtools/inspector.html?token='+token_browser+'&wss='+browserless.replace('https://', '')+':443/devtools/page/'+client.page._target._targetInfo.targetId : null
             webhooks.wh_connect(session, 'connected', info, browser, tokens)
             events.receiveMessage(session, client)
             events.statusMessage(session, client)
@@ -111,11 +113,11 @@ export default class Wppconnect {
                 client: client,
                 tokens: tokens
             })
-            return client, tokens;
+            return { client, tokens };
         } catch (error) {
             console.log(error)
         }
-
+        return undefined
     }
 
     static async stop(session) {
@@ -126,23 +128,22 @@ export default class Wppconnect {
         }
         return false
     }
+
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');
-        req.io.emit('qrCode',
-            {
-                data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
-                session: session
-            }
-        );
+        req.io.emit('qrCode', {
+            data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
+            session: session
+        });
     }
 
     static async getToken(session) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 const Session = doc(db, "Sessions", session);
                 const dados = await getDoc(Session);
-                if (dados.exists() && dados.data()?.Engine === process.env.ENGINE) {
+                if (dados.exists() && dados.data().Engine === process.env.ENGINE) {
                     let data = {
                         'WABrowserId': dados.data().WABrowserId,
                         'WASecretBundle': dados.data().WASecretBundle,
@@ -160,4 +161,5 @@ export default class Wppconnect {
             }
         })
     }
+
 }

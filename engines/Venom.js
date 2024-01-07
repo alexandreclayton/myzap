@@ -14,9 +14,9 @@ import config from '../config.js';
 export default class Venom {
 
     static async start(req, res, session) {
-
+        console.log('****** STARTING VENOM ******')
         let token = await this.getToken(session);
-        console.log(token)
+        console.log(`****** VENOM TOKEN: ${token} ******`)
         try {
             const client = await venom.create(
                 session,
@@ -27,7 +27,6 @@ export default class Venom {
                         qrCode: base64Qrimg
                     });
                 },
-
                 (statusSession, session) => {
                     console.log(statusSession)
                     Sessions.addInfoSession(session, {
@@ -40,7 +39,7 @@ export default class Venom {
                         statusSession === 'qrReadFail' ||
                         statusSession === 'autocloseCalled' ||
                         statusSession === 'serverClose') {
-                        req.io.emit('whatsapp-status', false);                      
+                        req.io.emit('whatsapp-status', false);
                     }
                     if (statusSession === 'isLogged' ||
                         statusSession === 'qrReadSuccess' ||
@@ -48,17 +47,18 @@ export default class Venom {
                         statusSession === 'inChat') {
                         req.io.emit('whatsapp-status', true)
                     }
-                },
-                {
+                }, {
+                    debug: false,
+                    updatesLog: true,
+                    devtools: false,
                     headless: true,
                     logQR: true,
                     browserWS: '', //browserless !=  '' ? browserless.replace('https://', 'wss://')+'?token='+token_browser : '',
                     useChrome: true,
-                    updatesLog: true,
                     autoClose: 90000,
                     disableSpins: false,
                     browserArgs: [
-                        '--log-level=3',
+                        '--log-level=0',
                         '--no-default-browser-check',
                         '--disable-site-isolation-trials',
                         '--no-experiments',
@@ -88,8 +88,7 @@ export default class Venom {
                         '--disable-accelerated-video-decode',
                     ],
                     createPathFileToken: false,
-                },
-                {
+                }, {
                     WABrowserId: token.WABrowserId,
                     WASecretBundle: token.WASecretBundle,
                     WAToken1: token.WAToken1,
@@ -100,7 +99,7 @@ export default class Venom {
             let info = await client.getHostDevice()
             let tokens = await client.getSessionTokenBrowser()
             let browser = []
-            // browserless != '' ? browserless+'/devtools/inspector.html?token='+token_browser+'&wss='+browserless.replace('https://', '')+':443/devtools/page/'+client.page._target._targetInfo.targetId : null
+                // browserless != '' ? browserless+'/devtools/inspector.html?token='+token_browser+'&wss='+browserless.replace('https://', '')+':443/devtools/page/'+client.page._target._targetInfo.targetId : null
             webhooks.wh_connect(session, 'connected', info, browser, tokens)
             events.receiveMessage(session, client)
             events.statusMessage(session, client)
@@ -111,10 +110,11 @@ export default class Venom {
                 client: client,
                 tokens: tokens
             })
-            return client, tokens;
+            return { client, tokens };
         } catch (error) {
             console.log(error)
         }
+        return undefined
     }
 
     static async stop(session) {
@@ -130,19 +130,21 @@ export default class Venom {
     static async exportQR(req, res, qrCode, session) {
         qrCode = qrCode.replace('data:image/png;base64,', '');
         const imageBuffer = Buffer.from(qrCode, 'base64');
-        req.io.emit('qrCode',
-            {
-                data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
-                session: session
-            }
-        );
+        req.io.emit('qrCode', {
+            data: 'data:image/png;base64,' + imageBuffer.toString('base64'),
+            session: session
+        });
     }
+
     static async getToken(session) {
-        return new Promise(async (resolve, reject) => {
+        console.log(`****** VENOM geToken(): ${session} ******`)
+        return new Promise(async(resolve, reject) => {
             try {
                 const Session = doc(db, "Sessions", session);
+                console.log('****** VENOM FIREBASE SESSION:=>******', Session)
                 const dados = await getDoc(Session);
-                if (dados.exists() && dados.data()?.Engine === process.env.ENGINE) {
+                console.log('****** VENOM FIREBASE SESSION->dados: ******', dados)
+                if (dados.exists() && dados.data().Engine === process.env.ENGINE) {
                     let data = {
                         'WABrowserId': dados.data().WABrowserId,
                         'WASecretBundle': dados.data().WASecretBundle,
@@ -150,14 +152,15 @@ export default class Venom {
                         'WAToken2': dados.data().WAToken2,
                         'Engine': process.env.ENGINE
                     }
+                    console.log('****** VENOM FIREBASE SESSION->dados->resolve->data:', data)
                     resolve(data)
                 } else {
                     resolve('no results found')
                 }
-
             } catch (error) {
                 reject(error)
             }
         })
     }
+
 }

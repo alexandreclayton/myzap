@@ -28,6 +28,7 @@ const checkNumber = async (req, res, next) => {
                     return res.status(400).json({
                         response: false,
                         status: "error",
+                        code: "NUMBER_NOT_EXIST",
                         message: 'O telefone informado nao esta registrado no whatsapp.'
                     })
                 } else {
@@ -44,6 +45,7 @@ const checkNumber = async (req, res, next) => {
                     return res.status(400).json({
                         response: false,
                         status: "error",
+                        code: "NUMBER_NOT_EXIST",
                         message: 'O telefone informado nao esta registrado no whatsapp.'
                     })
                 } else {

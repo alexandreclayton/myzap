@@ -11,8 +11,6 @@ import { setDoc, db, doc } from '../../firebase/db.js';
 
 export default class Auth {
 
-
-
     static async start(req, res) {
         try {
             if (Object.keys(config.firebaseConfig).length === 0) {
@@ -41,24 +39,29 @@ export default class Auth {
                             })
                         }
                     }
-    
+
                     async function init(session) {
-                        Sessions.checkAddUser(session)
-                        Sessions.addInfoSession(session, {
-                            apitoken: req.headers['apitoken'],
-                            sessionkey: req.headers['sessionkey'],
-                            wh_status: req.body.wh_status,
-                            wh_message: req.body.wh_message,
-                            wh_qrcode: req.body.wh_qrcode,
-                            wh_connect: req.body.wh_connect,
-                            wa_browser_id: req.headers['wa_browser_id'] ? req.headers['wa_browser_id'] : '',
-                            wa_secret_bundle: req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
-                            wa_token_1: req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
-                            wa_token_2: req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
-                        })
-    
+                        let sessionInfo = {
+													  'session': session,
+                            'apitoken': req.headers['apitoken'],
+                            'sessionkey': req.headers['sessionkey'],
+                            'wh_status': req.body.wh_status,
+                            'wh_message': req.body.wh_message,
+                            'wh_qrcode': req.body.wh_qrcode,
+                            'wh_connect': req.body.wh_connect,
+                            'wa_browser_id': req.headers['wa_browser_id'] ? req.headers['wa_browser_id'] : '',
+                            'wa_secret_bundle': req.headers['wa_secret_bundle'] ? req.headers['wa_secret_bundle'] : '',
+                            'wa_token_1': req.headers['wa_token_1'] ? req.headers['wa_token_1'] : '',
+                            'wa_token_2': req.headers['wa_token_2'] ? req.headers['wa_token_2'] : '',
+                        }
+												Sessions.checkAddUser(session)
+                        Sessions.addInfoSession(session, sessionInfo)
+
+												// const currentSession = Sessions.getSession(session)
+
                         let response = await engine.start(req, res, session)
                         if (response != undefined) {
+                            /*
                             let data = {
                                 'session': session,
                                 'apitoken': req.headers['apitoken'],
@@ -73,15 +76,29 @@ export default class Auth {
                                 'WAToken2': response.WAToken2,
                                 'Engine': process.env.ENGINE
                             }
-    
-                            await setDoc(doc(db, "Sessions", session), data);
-    
+                            */
+                            const {
+                                client,
+                                tokens: { WABrowserId = '', WASecretBundle = '', WAToken1 = '', WAToken2 = '' },
+                            } = response
+                            sessionInfo = {
+                                ...sessionInfo,
+                                'WABrowserId': WABrowserId ? WABrowserId?.replaceAll('"', '') : sessionInfo.wa_browser_id,
+                                'WASecretBundle': WASecretBundle ? WASecretBundle?.replaceAll('"', '') : sessionInfo.wa_secret_bundle,
+                                'WAToken1': WAToken1 ? WAToken1?.replaceAll('"', '') : sessionInfo.wa_token_1,
+                                'WAToken2': WAToken2 ? WAToken2?.replaceAll('"', '') : sessionInfo.wa_token_2,
+                                'Engine': process.env.ENGINE
+                            }
+
+                            await setDoc(doc(db, "Sessions", session), sessionInfo);
+
                             res.status(200).json({
                                 "result": 200,
                                 "status": "CONNECTED",
-                                "response": `Sessão ${session} gravada com sucesso no Firebase`
+                                "response": `Sessão ${session} gravada com sucesso no Firebase`,
+                                sessionInfo
                             })
-    
+
                         }
                     }
                 }
@@ -98,7 +115,7 @@ export default class Auth {
                     })
                 }
             }
-    
+
         } catch (error) {
             res.status(500).json({
                 result: 500,
@@ -107,8 +124,6 @@ export default class Auth {
             })
         }
     }
-    
-
 
     static async logoutSession(req, res) {
         let data = Sessions.getSession(req.body.session)
@@ -125,8 +140,6 @@ export default class Auth {
             });
         }
     }
-
-
 
     static async closeSession(req, res) {
         let session = req.body.session;
@@ -215,6 +228,7 @@ export default class Auth {
             });
         }
     }
+
     static async showAllSessions(req, res) {
         // let data = Sessions.getAll();
         // const allSessions = data.forEach(element => {
@@ -234,5 +248,5 @@ export default class Auth {
         // console.log(allSessions);
         // return res.status(200).json(allSessions);
     }
-}
 
+}

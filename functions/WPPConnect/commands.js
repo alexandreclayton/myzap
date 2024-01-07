@@ -28,6 +28,7 @@ export default class Commands {
       })
     }
   }
+
   static async getConnectionState(req, res) {
     try {
       let data = Sessions.getSession(req.body.session)
@@ -68,7 +69,6 @@ export default class Commands {
       })
     }
   }
-
 
   static async getAllContacts(req, res) {
     try {
@@ -204,7 +204,7 @@ export default class Commands {
     try {
       let response = await data.client.loadAndGetAllMessagesInChat(number, true)
       let messages = response.map(function (data) {
-        console.log(data)
+        // console.log(data)
         return {
           "type": data.type,
           "author": data.verifiedName,
@@ -246,16 +246,45 @@ export default class Commands {
     }
   }
 
+  static async getContact(req, res) {
+    try {
+      const session = req?.body?.session ?? ''
+      if (!session) throw new Error(`Session "${session}" is invalid!`)
+      const data = Sessions.getSession(session)
+      const number = req?.body?.number ?? ''
+      // console.log(`Get Contact to number: ${number}`)
+      const response = await data.client.getContact(number + '@c.us')
+      console.dir(response, { depth: null })
+      const responseStatus = !response ? 400 : 200
+      return res.status(responseStatus).json({
+        ...response,
+        "id": ((response?.id?.user ?? '') + (response?.id?.server ?? '')) ?? '',
+        "result": responseStatus,
+        "messages": responseStatus == 200 ? "SUCCESS" : "NOT LOCALIZED",
+      })
+    } catch (error) {
+      return res.status(400).json({
+        "result": 400,
+        "status": "FAIL",
+        "error": error
+      })
+    }
+  }
+
   static async verifyNumber(req, res) {
     let data = Sessions.getSession(req.body.session)
     try {
       let number = req.body.number + '@c.us';
-      let profile = await data.client.getNumberProfile(number)
-      if (profile.numberExists) {
+      const response = await data.client.checkNumberStatus(number)
+      if (response.numberExists) {
         return res.status(200).json({
           "result": 200,
           "messages": "SUCCESS",
-          "profile": profile
+          "server": response.id.server,
+          "phone": response.id.user,
+          "isBusiness": response.isBusiness,
+          "canReceiveMessage": response.canReceiveMessage,
+          "profile": response
         })
       }
     } catch (error) {
@@ -403,12 +432,14 @@ export default class Commands {
     let data = Sessions.getSession(req.body.session)
     let number = req.body.number + '@c.us';
     try {
-      const response = await data.client.getNumberProfile(number);
+      const response = await data.client.checkNumberStatus(number);
       return res.status(200).json({
         "result": 200,
         "messages": "SUCCESS",
+        "server": response.id.server,
         "phone": response.id.user,
-        "isBusiness": response.isBusiness
+        "isBusiness": response.isBusiness,
+        "canReceiveMessage": response.canReceiveMessage,
       })
     } catch (error) {
       return res.status(400).json({
@@ -418,4 +449,5 @@ export default class Commands {
       })
     }
   }
+
 }

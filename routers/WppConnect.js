@@ -20,7 +20,8 @@ import database from'../firebase/functions.js';
 import { setDoc, doc, db} from'../firebase/db.js';
 
 Router.post('/start', Auth.start)
-// Sessões 
+
+//* Sessões 
 Router.post('/logout', checkParams, Auth.logoutSession);
 Router.post('/close', checkParams, Auth.closeSession);
 Router.post('/SessionState', checkParams, Auth.getSessionState);
@@ -29,7 +30,7 @@ Router.post('/deleteSession', database.deleteSession);
 Router.post('/getAllSessions', database.getAllSessions);
 Router.get('/getQrCode', Auth.getQrCode);
 
-// Mensagens
+//* Mensagens
 Router.post('/sendText', checkParams, checkNumber, Mensagens.sendText);
 Router.post('/sendImage', checkParams, checkNumber, Mensagens.sendImage);
 Router.post('/sendVideo', checkParams, checkNumber, Mensagens.sendVideo);
@@ -49,8 +50,11 @@ Router.post('/getAllChatsWithMessages', checkParams, Commands.getAllChatsWithMes
 Router.post('/getAllNewMessages', checkParams, Commands.getAllNewMessages);
 Router.post('/getAllUnreadMessages', checkParams, Commands.getAllUnreadMessages);
 Router.post('/getOrderbyMsg', checkParams, Mensagens.getOrderbyMsg);
+Router.post('/sendListMenu', checkParams, checkNumber, Mensagens.sendListMenu);
+Router.post('/sendButtons', checkParams, checkNumber, Mensagens.sendButtons);
+Router.post('/sendMessageWithThumb', checkParams, checkNumber, Mensagens.sendMessageWithThumb);
 
-// // Grupos
+//* Grupos
 Router.post('/getAllGroups', checkParams, Groups.getAllGroups);
 Router.post('/joinGroup', checkParams, Groups.joinGroup);
 Router.post('/createGroup', checkParams, Groups.createGroup);
@@ -65,19 +69,21 @@ Router.post('/changePrivacyGroup', checkParams, Groups.changePrivacyGroup); //no
 Router.post('/getGroupInviteLink', checkParams, Groups.getGroupInviteLink);
 Router.post('/setGroupPic', checkParams, Groups.setGroupPic); // ver funcao nao exite
 
-// // Status
+//* Status
 Router.post('/sendTextToStorie', checkParams, Status.sendTextToStorie);
 Router.post('/sendImageToStorie', checkParams, Status.sendImageToStorie);
 Router.post('/sendVideoToStorie', checkParams, Status.sendVideoToStorie);
 
-// // Dispositivo, chats entre outras
+//* Dispositivo, chats entre outras
 Router.post('/getBatteryLevel', checkParams, Commands.getBatteryLevel);
 Router.post('/getConnectionState', checkParams, Commands.getConnectionState);
 Router.post('/getHostDevice', checkParams, Commands.getHostDevice);
 Router.post('/getAllContacts', checkParams, Commands.getAllContacts);
 Router.post('/getBlockList', checkParams, Commands.getBlockList);
 
+// * Contact
 Router.post('/getProfilePic', checkParams, checkNumber, Commands.getProfilePic);
+Router.post('/getContact', checkParams, checkNumber, Commands.getContact);
 Router.post('/verifyNumber', checkParams, checkNumber, Commands.verifyNumber);
 Router.post('/deleteChat', checkParams, checkNumber, Commands.deleteChat);
 Router.post('/clearChat', checkParams, checkNumber, Commands.clearChat);
@@ -88,6 +94,5 @@ Router.post('/markUnseenMessage', checkParams, checkNumber, Commands.markUnseenM
 Router.post('/blockContact', checkParams, checkNumber, Commands.blockContact);
 Router.post('/unblockContact', checkParams, checkNumber, Commands.unblockContact);
 Router.post('/getNumberProfile', checkParams, checkNumber, Commands.getNumberProfile);
-
 
 export default { Router };

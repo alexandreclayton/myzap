@@ -52,7 +52,7 @@ export default class Sessions {
         return false
     }
 
-    // adicionar informações a sessão 
+    // adicionar informações a sessão
     static addInfoSession(name, extend) {
 
         if (this.checkSession(name)) {

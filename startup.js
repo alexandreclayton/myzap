@@ -8,7 +8,7 @@
 ##############################################################################*/
 
 import SessionsDB from "./firebase/model.js";
-import { snapshot} from './firebase/db.js';
+import { snapshot } from './firebase/db.js';
 import request from "request-promise";
 import config from "./config.js";
 
@@ -36,7 +36,7 @@ async function getAllSessions() {
                 );
                 SessionsArray.push(Session);
             });
-            return (SessionsArray);
+            return SessionsArray;
         }
     } catch (error) {
         return (error.message);
@@ -58,7 +58,7 @@ async function startAllSessions() {
                     'url': `${config.host}:${config.port}/start`,
                     'headers': {
                         'apitoken': item.apitoken,
-                        'sessionkey': item.sessionkey
+                        'sessionkey': item.sessionkey,
                     },
                     body: {
                         "session": item.session,
@@ -67,7 +67,6 @@ async function startAllSessions() {
                         "wh_status": item.wh_status,
                         "wh_message": item.wh_message
                     }
-
                 };
                 request(options).then(result => {
                     console.log(result)

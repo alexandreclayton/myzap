@@ -5,11 +5,11 @@
  * @LastEditTime: 2021-06-07 03:18:01
  */
 import Sessions from '../controllers/sessions.js';
-import superagent  from 'superagent';
+import superagent from 'superagent';
 import 'superagent-queue';
 import dotenv from 'dotenv'
 dotenv.config();
-//require('superagent-queue');
+// require('superagent-queue');
 //require('dotenv').config();
 
 export default class Webhooks {
@@ -22,7 +22,7 @@ export default class Webhooks {
                     .post(data.wh_message)
                     .send(response)
                     .queue('messages')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks receive message....')
                     });
                 if (data.wh_message == '') {
@@ -37,7 +37,13 @@ export default class Webhooks {
     static async wh_connect(session, response, number = null, browserless = null, tokens = []) {
         let data = Sessions.getSession(session)
         if (response == 'autocloseCalled' || response == 'desconnectedMobile') {
-            Sessions.deleteSession(session)
+						let sessionWaClean = {
+							'wa_browser_id': '',
+							'wa_secret_bundle': '',
+							'wa_token_1':  '',
+							'wa_token_2': '',
+						}
+            Sessions.addInfoSession(session, sessionWaClean)
         }
         try {
             if (response == 'qrReadSuccess' || response == 'connected') {
@@ -64,7 +70,7 @@ export default class Webhooks {
                     .post(data.wh_connect)
                     .send(object)
                     .queue('connection')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks connect status....')
                     });
                 if (data.wh_connect == '') {
@@ -86,7 +92,7 @@ export default class Webhooks {
                     .post(data.wh_status)
                     .send(response)
                     .queue('status')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks status message....')
                     });
                 if (data.wh_status == '') {
@@ -100,20 +106,20 @@ export default class Webhooks {
     }
 
     static async wh_qrcode(session, response) {
-        let data = Sessions.getSession(session)
-        try {
+			try {
+						let data = Sessions.getSession(session)
             let object = {
                 "wook": 'QRCODE',
                 'result': 200,
                 'session': session,
                 'qrcode': response
             }
-            if (data.wh_qrcode != undefined) {
+						if (data.wh_qrcode != undefined) {
                 await superagent
                     .post(data.wh_qrcode)
                     .send(object)
                     .queue('qrcode')
-                    .end(function () {
+                    .end(function() {
                         console.log('webhooks status message....')
                     });
                 if (data.wh_qrcode == '') {
@@ -122,7 +128,8 @@ export default class Webhooks {
             }
 
         } catch (error) {
-            console.log(error)
+            console.log('Error on send hook qrcode, reason: ', error)
         }
     }
+
 }
