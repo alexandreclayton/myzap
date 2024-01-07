@@ -29,7 +29,8 @@ const {
   MESSAGING_SENDER_ID,
   APP_ID,
   START_ALL_SESSIONS,
-  FORCE_CONNECTION_USE_HERE
+  FORCE_CONNECTION_USE_HERE,
+  FIREBASE_SESSION_PATH
 } = process.env;
 
 assert(PORT, 'PORT is required, please set the PORT variable value in the .env file');
@@ -57,4 +58,5 @@ export default {
   },
   start_all_sessions: START_ALL_SESSIONS,
   useHere: FORCE_CONNECTION_USE_HERE,
+  firebaseSessionPath: FIREBASE_SESSION_PATH || 'Sessions'
 }
