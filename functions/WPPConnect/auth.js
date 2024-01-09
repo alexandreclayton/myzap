@@ -90,7 +90,7 @@ export default class Auth {
                                 'Engine': process.env.ENGINE
                             }
 
-                            await setDoc(doc(db, "Sessions", session), sessionInfo);
+                            await setDoc(doc(db, config.firebaseSessionPath, session), sessionInfo);
 
                             res.status(200).json({
                                 "result": 200,

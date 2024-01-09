@@ -100,7 +100,7 @@ if (config.https == 1) {
                 console.log(error)
             } else {
                 console.log('\n\nWelcome to')
-                yo('MyZAP', {
+                yo('Divnet', {
                     color: 'rainbow',
                     spacing: 1,
                 });
@@ -121,12 +121,13 @@ if (config.https == 1) {
                 console.log(error)
             } else {
                 console.log('\n\nWelcome to:')
-                yo('MyZAP', {
+                yo('Divnet', {
                     color: 'rainbow',
                     spacing: 1,
                 });
-                console.log('- Customized by @alexandreclayton - Semar Sistemas')
+                console.log('- Customized by @alexandreclayton - Divnet')
                 console.log(`- On Engine: ${engine.descricao}`)
+                console.log(`- Sessions Path: ${config.firebaseSessionPath}`)
                 console.log(`- Http server running on ${config.host}:${config.port}\n\n`);
                 if (config.start_all_sessions == 'true') {
                     let result = await startAllSessions()
