@@ -141,7 +141,7 @@ export default class Wppconnect {
     static async getToken(session) {
         return new Promise(async(resolve, reject) => {
             try {
-                const Session = doc(db, "Sessions", session);
+                const Session = doc(db, config.firebaseSessionPath, session);
                 const dados = await getDoc(Session);
                 if (dados.exists() && dados.data().Engine === process.env.ENGINE) {
                     let data = {
