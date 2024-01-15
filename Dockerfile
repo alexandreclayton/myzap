@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 AS sn-zap-stage-base
+FROM ubuntu:20.04 AS sn-zap-stage-base
 WORKDIR /usr/src/app
 
 ENV TZ="America/Recife"
@@ -50,8 +50,8 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y --no-install-recommends tzdata
 
 RUN apt-get install curl -y \
-	&& curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-	&& apt-get install -y nodejs
+ 	&& curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+ 	&& apt-get install -y nodejs
 
 CMD bash
 
@@ -67,6 +67,8 @@ RUN rm -Rf package-lock.json
 
 COPY package.json .
 RUN npm install
+#RUN npm install --unsafe-perm
+#RUN npm install --include=optional sharp
 
 FROM sn-zap-stage-install as sn-zap-stage-run
 WORKDIR /usr/src/app
