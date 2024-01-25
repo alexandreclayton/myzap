@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS sn-zap-stage-base
+FROM ubuntu:22.04 AS sn-zap-stage-base
 WORKDIR /usr/src/app
 
 ENV TZ="America/Recife"
@@ -50,7 +50,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y --no-install-recommends tzdata
 
 RUN apt-get install curl -y \
- 	&& curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+ 	&& curl -sL https://deb.nodesource.com/setup_20.x | bash - \
  	&& apt-get install -y nodejs
 
 CMD bash

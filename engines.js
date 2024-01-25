@@ -6,29 +6,29 @@
  */
 
 // * Engines
-import whatsappwebjs from "./engines/WhatsappWebJS.js";
-import venom from "./engines/Venom.js";
+// import whatsappwebjs from "./engines/WhatsappWebJS.js";
+// import venom from "./engines/Venom.js";
 import whatsconnet from "./engines/WppConnect.js";
 
 // * Routes
-import routeWhatsappwebjs from "./routers/WhatsappWebJS.js";
-import routeVenom from "./routers/Venom.js";
+// import routeWhatsappwebjs from "./routers/WhatsappWebJS.js";
+// import routeVenom from "./routers/Venom.js";
 import routeWhatsconnet from "./routers/WppConnect.js";
 
 export default {
-    1: {
-        descricao: "Whatsapp-Web-JS",
-        motor: whatsappwebjs,
-        router: routeWhatsappwebjs.Router,
-    },
+    // 1: {
+    //     descricao: "Whatsapp-Web-JS",
+    //     motor: whatsappwebjs,
+    //     router: routeWhatsappwebjs.Router,
+    // },
     2: {
         descricao: "WPPConnect",
         motor: whatsconnet,
         router: routeWhatsconnet.Router,
     },
-    3: {
-        descricao: "Venom-bot",
-        motor: venom,
-        router: routeVenom.Router,
-    },
+    // 3: {
+    //     descricao: "Venom-bot",
+    //     motor: venom,
+    //     router: routeVenom.Router,
+    // },
 };
