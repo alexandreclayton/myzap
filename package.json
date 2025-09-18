@@ -1,7 +1,7 @@
 {
     "name": "myzap2.0",
     "description": "<h1 align=\"center\">\r     <a href=\"\">🔗 MyZAP</a>\r </h1>\r <p align=\"center\">🚀 Permite a integração do WhatsApp com qualquer aplicação por meio de requisições POST/GET</p>",
-    "version": "1.0.32",
+    "version": "1.0.33",
     "main": "index.js",
     "type": "module",
     "scripts": {
@@ -28,7 +28,7 @@
     },
     "homepage": "https://github.com/edupoli/MyZap2.0#readme",
     "dependencies": {
-        "@wppconnect-team/wppconnect": "^1.37.3",
+        "@wppconnect-team/wppconnect": "^1.37.5",
         "assert": "^2.0.0",
         "async-get-file": "^1.0.4",
         "axios": "^0.21.2",
